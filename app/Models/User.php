@@ -3,14 +3,17 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+
+use Illuminate\Notifications\Notifiable;
+use Cviebrock\EloquentSluggable\Sluggable;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, Sluggable;
 
     /**
      * The attributes that are mass assignable.
@@ -21,6 +24,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'is_admin',
+        'image',
     ];
 
     /**
@@ -33,6 +38,12 @@ class User extends Authenticatable
         'remember_token',
     ];
 
+    // public function order(): HasOne
+    // {
+    //     return $this->hasOne(Order::class);
+    // }
+
+
     /**
      * Get the attributes that should be cast.
      *
@@ -43,6 +54,16 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+        ];
+    }
+
+    public function sluggable(): array
+    {
+        return [
+            'slug' => [
+                'source' => 'name',
+                'onUpdate' => true,
+            ]
         ];
     }
 }
