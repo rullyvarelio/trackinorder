@@ -19,8 +19,8 @@ $user = Auth::user();
     @endif
 
     <x-menu activate-by-route>
-        <x-menu-item title="Home" icon="o-home" link="dashboard" />
-        <x-menu-item title="Products" icon="o-archive-box" link="products" />
+        <x-menu-item title="Home" icon="o-home" link="{{ route('dashboard') }}" />
+        <x-menu-item title="Products" icon="o-archive-box" link="{{ route('products') }}" />
         <x-menu-sub title="Stock management" icon="o-inbox-stack">
             <x-menu-item title="Stocks" icon="o-square-2-stack" link="stocks" />
             <x-menu-item title="Stock in" icon="o-arrow-down-on-square-stack" link="stocks/stock-in" />
