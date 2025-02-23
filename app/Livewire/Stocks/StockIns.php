@@ -34,7 +34,7 @@ class StockIns extends Component
 
     public function save()
     {
-        $this->invoice_number = Str::random(4).date('Ymd');
+        $this->invoice_number = Str::random(4) . date('Ymd');
 
         $validated = $this->validate();
 
@@ -50,13 +50,12 @@ class StockIns extends Component
             Product::where('id', $this->product_id)->update(['status' => 1]);
         }
 
-        $this->toast(
-            type: 'success',
+        $this->success(
             title: 'Stock successfully updated!',
             description: null,
             position: 'toast-top toast-end',
             icon: 'o-information-circle',
-            css: 'alert-info',
+            css: 'alert-success',
             timeout: 3000,
             redirectTo: route('stocks.index')
         );

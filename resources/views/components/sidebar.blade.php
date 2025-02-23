@@ -21,7 +21,7 @@
             <x-list-item :item="$user" value="name" sub-value="email" no-separator no-hover class="pt-2">
                 <x-slot:avatar>
                     @if ($user->image)
-                        <x-avatar :image="$user->image" />
+                        <x-avatar :image="asset('local-storage/' . $user->image)" />
                     @else
                         <x-avatar :placeholder="getInitials($user->name)" />
                     @endif
@@ -45,7 +45,7 @@
             <x-menu-item title="Stock in" icon="o-arrow-down-on-square-stack" :link="route('stocks.in')" wire:navigate />
             <x-menu-item title="Stock out" icon="o-arrow-up-on-square-stack" :link="route('stocks.out')" wire:navigate />
         </x-menu-sub>
-        <x-menu-item title="Employees" icon="o-user-group" link="employees" wire:navigate />
+        <x-menu-item title="Employees" icon="o-user-group" :link="route('employees.index')" wire:navigate />
         <x-menu-item title="Reports" icon="o-document-chart-bar" link="reports" wire:navigate />
         @if ($user->is_admin)
             <x-menu-separator />

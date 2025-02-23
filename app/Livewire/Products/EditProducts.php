@@ -54,7 +54,7 @@ class EditProducts extends Component
             'price' => 'required|integer',
             'stock' => 'required|integer',
             'status' => 'required',
-            'image' => 'nullable|image', // Image validation
+            'image' => 'nullable|image',
         ]);
 
         $product = Product::where('slug', $this->slug)->firstOrFail();
@@ -66,26 +66,25 @@ class EditProducts extends Component
         }
 
         if ($this->image) {
-            $path = $this->image->store('product_images'); // Save to storage/app/public/product
+            $path = $this->image->store('product_images');
             $validated['image'] = $path;
 
-            // Delete old image (if exists)
+
             if ($this->oldImage) {
                 Storage::delete($this->oldImage);
             }
         } else {
-            $validated['image'] = $this->oldImage; // Keep old image if new one not uploaded
+            $validated['image'] = $this->oldImage;
         }
 
         $product->update($validated);
 
-        $this->toast(
-            type: 'success',
+        $this->success(
             title: 'Product successfully updated!',
             description: null,
             position: 'toast-top toast-end',
             icon: 'o-information-circle',
-            css: 'alert-info',
+            css: 'alert-success',
             timeout: 3000,
             redirectTo: route('products.index')
         );

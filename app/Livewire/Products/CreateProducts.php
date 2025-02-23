@@ -54,13 +54,12 @@ class CreateProducts extends Component
 
         Product::create($validated);
 
-        $this->toast(
-            type: 'success',
+        $this->success(
             title: 'Product successfully created!',
             description: null,
             position: 'toast-top toast-end',
             icon: 'o-information-circle',
-            css: 'alert-info',
+            css: 'alert-success',
             timeout: 3000,
             redirectTo: route('products.index')
         );

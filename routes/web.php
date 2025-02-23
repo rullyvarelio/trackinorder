@@ -2,6 +2,9 @@
 
 use App\Http\Controllers\LogoutController;
 use App\Livewire\Dashboard;
+use App\Livewire\Employees\CreateEmployees;
+use App\Livewire\Employees\EditEmployees;
+use App\Livewire\Employees\ShowEmployees;
 use App\Livewire\Login;
 use App\Livewire\Products\CreateProducts;
 use App\Livewire\Products\EditProducts;
@@ -26,5 +29,9 @@ Route::get('dashboard/products/{slug}/edit', EditProducts::class)->name('product
 Route::get('dashboard/stocks', ShowStock::class)->name('stocks.index')->middleware('auth');
 Route::get('dashboard/stock/stock-in', StockIns::class)->name('stocks.in')->middleware('auth');
 Route::get('dashboard/stock/stock-out', StockOuts::class)->name('stocks.out')->middleware('auth');
+
+Route::get('dashboard/employees', ShowEmployees::class)->name('employees.index')->middleware('auth');
+Route::get('dashboard/employees/create', CreateEmployees::class)->name('employees.create')->middleware('auth');
+Route::get('dashboard/employees/{slug}/edit', EditEmployees::class)->name('employees.edit')->middleware('auth');
 
 Route::post('logout', LogoutController::class)->name('logout')->middleware('auth');
