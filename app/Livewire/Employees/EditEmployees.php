@@ -3,10 +3,10 @@
 namespace App\Livewire\Employees;
 
 use App\Models\User;
-use Mary\Traits\Toast;
+use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
 use Livewire\WithFileUploads;
-use Illuminate\Support\Facades\Storage;
+use Mary\Traits\Toast;
 
 class EditEmployees extends Component
 {
@@ -44,7 +44,6 @@ class EditEmployees extends Component
         $this->oldImage = $user->image;
     }
 
-
     public function update()
     {
         $validated = $this->validate([
@@ -56,7 +55,6 @@ class EditEmployees extends Component
         ]);
 
         $product = User::where('slug', $this->slug)->firstOrFail();
-
 
         if ($this->image) {
             $path = $this->image->store('employee_images');
@@ -90,7 +88,7 @@ class EditEmployees extends Component
         ];
 
         return view('livewire.employees.edit-employees', [
-            'isAdmin' => $isAdmin
+            'isAdmin' => $isAdmin,
 
         ]);
     }

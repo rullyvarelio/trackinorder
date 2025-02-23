@@ -69,7 +69,6 @@ class EditProducts extends Component
             $path = $this->image->store('product_images');
             $validated['image'] = $path;
 
-
             if ($this->oldImage) {
                 Storage::delete($this->oldImage);
             }

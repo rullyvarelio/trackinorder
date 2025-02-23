@@ -3,10 +3,9 @@
 namespace App\Livewire\Employees;
 
 use App\Models\User;
-use Livewire\Component;
-use Livewire\WithPagination;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Livewire\Component;
 
 class ShowEmployees extends Component
 {
@@ -25,6 +24,7 @@ class ShowEmployees extends Component
             session()->flash('error', 'Product not found!');
         }
     }
+
     public function render()
     {
         $users = User::all()->except(Auth::id());
@@ -36,6 +36,7 @@ class ShowEmployees extends Component
             ['key' => 'cta', 'label' => 'Action'],
 
         ];
+
         return view('livewire.employees.show-employees', [
             'users' => $users,
             'headers' => $headers,

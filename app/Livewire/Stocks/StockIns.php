@@ -34,7 +34,7 @@ class StockIns extends Component
 
     public function save()
     {
-        $this->invoice_number = Str::random(4) . date('Ymd');
+        $this->invoice_number = Str::random(4).date('Ymd');
 
         $validated = $this->validate();
 

@@ -3,10 +3,9 @@
 namespace App\Livewire\Employees;
 
 use App\Models\User;
-use Livewire\Component;
-use Illuminate\Support\Str;
-use Livewire\Attributes\Validate;
 use Cviebrock\EloquentSluggable\Services\SlugService;
+use Livewire\Attributes\Validate;
+use Livewire\Component;
 use Livewire\WithFileUploads;
 use Mary\Traits\Toast;
 
@@ -34,7 +33,6 @@ class CreateEmployees extends Component
 
     #[Validate('nullable')]
     public $image;
-
 
     public function save()
     {
@@ -67,8 +65,9 @@ class CreateEmployees extends Component
             ['id' => 0, 'name' => 'Staff'],
             ['id' => 1, 'name' => 'Admin'],
         ];
+
         return view('livewire.employees.create-employees', [
-            'isAdmin' => $isAdmin
+            'isAdmin' => $isAdmin,
         ]);
     }
 }
