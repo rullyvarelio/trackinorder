@@ -2,7 +2,7 @@
 
 namespace App\Livewire\Stocks;
 
-use App\Models\Products;
+use App\Models\Product;
 use App\Models\StockOut;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
@@ -31,7 +31,7 @@ class StockOuts extends Component
     {
         $validated = $this->validate();
 
-        $product = Products::find($this->product_id);
+        $product = Product::find($this->product_id);
 
         if (! $product || $product->stock < $this->quantity) {
             $this->error(
@@ -63,7 +63,7 @@ class StockOuts extends Component
 
     public function render()
     {
-        $products = Products::all();
+        $products = Product::all();
         $reasons = [
             ['id' => 1, 'name' => 'Expired'],
             ['id' => 2, 'name' => 'Damaged'],

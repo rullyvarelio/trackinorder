@@ -1,5 +1,5 @@
 @php
-    $categories = App\Models\Categories::all();
+    $categories = App\Models\Category::all();
 @endphp
 <div>
     <x-header title="Edit Product" />

@@ -2,7 +2,7 @@
 
 namespace App\Livewire\Stocks;
 
-use App\Models\Products;
+use App\Models\Product;
 use App\Models\Stock;
 use App\Models\StockIn;
 use Illuminate\Support\Str;
@@ -44,10 +44,10 @@ class StockIns extends Component
         $stock->quantity += $this->quantity;
         $stock->save();
 
-        Products::where('id', $this->product_id)->update(['stock' => $stock->quantity]);
+        Product::where('id', $this->product_id)->update(['stock' => $stock->quantity]);
 
         if ($stock->quantity) {
-            Products::where('id', $this->product_id)->update(['status' => 1]);
+            Product::where('id', $this->product_id)->update(['status' => 1]);
         }
 
         $this->toast(
@@ -64,7 +64,7 @@ class StockIns extends Component
 
     public function render()
     {
-        $products = Products::all();
+        $products = Product::all();
 
         return view('livewire.stocks.stock-in', [
             'products' => $products,

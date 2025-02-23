@@ -2,7 +2,7 @@
 
 namespace App\Livewire\Products;
 
-use App\Models\Products;
+use App\Models\Product;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
 use Livewire\WithFileUploads;
@@ -32,7 +32,7 @@ class EditProducts extends Component
     {
         $this->slug = $slug;
 
-        $product = Products::where('slug', $slug)->first();
+        $product = Product::where('slug', $slug)->first();
 
         if (! $product) {
             abort(404);
@@ -57,7 +57,7 @@ class EditProducts extends Component
             'image' => 'nullable|image', // Image validation
         ]);
 
-        $product = Products::where('slug', $this->slug)->firstOrFail();
+        $product = Product::where('slug', $this->slug)->firstOrFail();
 
         if ($this->stock > 0) {
             $this->status = true;
@@ -66,7 +66,7 @@ class EditProducts extends Component
         }
 
         if ($this->image) {
-            $path = $this->image->store('product_images'); // Save to storage/app/public/products
+            $path = $this->image->store('product_images'); // Save to storage/app/public/product
             $validated['image'] = $path;
 
             // Delete old image (if exists)
@@ -93,7 +93,7 @@ class EditProducts extends Component
 
     public function render()
     {
-        $product = Products::where('slug', $this->slug)->first();
+        $product = Product::where('slug', $this->slug)->first();
 
         return view('livewire.products.edit-products', ['product' => $product]);
     }

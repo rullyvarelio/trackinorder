@@ -2,14 +2,14 @@
 
 namespace App\Livewire\Stocks;
 
-use App\Models\Products;
+use App\Models\Product;
 use Livewire\Component;
 
 class ShowStock extends Component
 {
     public function render()
     {
-        $products = Products::with('category')->paginate(5);
+        $products = Product::with('category')->paginate(5);
 
         $headers = [
             ['key' => 'name', 'label' => 'Name'],

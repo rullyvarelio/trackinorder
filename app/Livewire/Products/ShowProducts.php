@@ -2,7 +2,7 @@
 
 namespace App\Livewire\Products;
 
-use App\Models\Products;
+use App\Models\Product;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -15,7 +15,7 @@ class ShowProducts extends Component
 
     public function delete($id)
     {
-        $product = Products::where('id', $id)->first();
+        $product = Product::where('id', $id)->first();
 
         if ($product) {
             if ($product->image) {
@@ -31,7 +31,7 @@ class ShowProducts extends Component
 
     public function render()
     {
-        $products = Products::with('category')->paginate(5);
+        $products = Product::with('category')->paginate(5);
 
         $headers = [
             ['key' => 'name', 'label' => 'Name'],

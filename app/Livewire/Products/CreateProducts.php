@@ -2,7 +2,7 @@
 
 namespace App\Livewire\Products;
 
-use App\Models\Products;
+use App\Models\Product;
 use Cviebrock\EloquentSluggable\Services\SlugService;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
@@ -43,7 +43,7 @@ class CreateProducts extends Component
         }
 
         if ($this->name) {
-            $this->slug = SlugService::createSlug(Products::class, 'slug', $this->name);
+            $this->slug = SlugService::createSlug(Product::class, 'slug', $this->name);
         }
 
         $validated = $this->validate();
@@ -52,7 +52,7 @@ class CreateProducts extends Component
             $validated['image'] = $this->image->store('product_images');
         }
 
-        Products::create($validated);
+        Product::create($validated);
 
         $this->toast(
             type: 'success',

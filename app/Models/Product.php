@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class Products extends Model
+class Product extends Model
 {
     use HasFactory, Sluggable;
 
@@ -25,23 +25,23 @@ class Products extends Model
      */
     public function category(): BelongsTo
     {
-        return $this->belongsTo(Categories::class);
+        return $this->belongsTo(Category::class);
     }
 
-    // public function stock()
-    // {
-    //     return $this->hasOne(Stock::class);
-    // }
+    public function stock()
+    {
+        return $this->hasOne(Stock::class);
+    }
 
-    // public function stockIn()
-    // {
-    //     return $this->hasMany(StockIn::class);
-    // }
+    public function stockIn()
+    {
+        return $this->hasMany(StockIn::class);
+    }
 
-    // public function stockOut()
-    // {
-    //     return $this->hasMany(StockOut::class);
-    // }
+    public function stockOut()
+    {
+        return $this->hasMany(StockOut::class);
+    }
 
     // public function orders()
     // {

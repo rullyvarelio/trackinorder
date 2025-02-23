@@ -2,19 +2,19 @@
 
 namespace Database\Seeders;
 
-use App\Models\Categories;
-use App\Models\Products;
+use App\Models\Category;
+use App\Models\Product;
 use Illuminate\Database\Seeder;
 
-class ProductsSeeder extends Seeder
+class ProductSeeder extends Seeder
 {
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
-        Products::factory(10)->recycle(
-            Categories::all('id')
+        Product::factory(5)->recycle(
+            Category::all('id')
         )->create();
     }
 }
