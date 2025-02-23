@@ -2,16 +2,16 @@
 
 namespace App\Livewire\Products;
 
-use Livewire\Component;
 use App\Models\Products;
-use Livewire\WithFileUploads;
-use Livewire\Attributes\Validate;
 use Cviebrock\EloquentSluggable\Services\SlugService;
+use Livewire\Attributes\Validate;
+use Livewire\Component;
+use Livewire\WithFileUploads;
 use Mary\Traits\Toast;
 
 class CreateProducts extends Component
 {
-    use WithFileUploads, Toast;
+    use Toast, WithFileUploads;
 
     #[Validate('required')]
     public $name;
@@ -45,7 +45,6 @@ class CreateProducts extends Component
         if ($this->name) {
             $this->slug = SlugService::createSlug(Products::class, 'slug', $this->name);
         }
-
 
         $validated = $this->validate();
 

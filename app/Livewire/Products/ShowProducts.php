@@ -2,16 +2,17 @@
 
 namespace App\Livewire\Products;
 
-use Livewire\Component;
 use App\Models\Products;
-use Livewire\WithPagination;
 use Illuminate\Support\Facades\Storage;
+use Livewire\Component;
+use Livewire\WithPagination;
 
 class ShowProducts extends Component
 {
     public bool $myModal1 = false;
 
     use WithPagination;
+
     public function delete($id)
     {
         $product = Products::where('id', $id)->first();
@@ -30,6 +31,20 @@ class ShowProducts extends Component
 
     public function render()
     {
-        return view('livewire.products.show-products');
+        $products = Products::with('category')->paginate(5);
+
+        $headers = [
+            ['key' => 'name', 'label' => 'Name'],
+            ['key' => 'category.name', 'label' => 'Category'],
+            ['key' => 'price', 'label' => 'Price', 'format' => ['currency', '2,.', '$ ']],
+            ['key' => 'stock', 'label' => 'Stock'],
+            ['key' => 'status', 'label' => 'Status'],
+            ['key' => 'action', 'label' => 'Action'],
+        ];
+
+        return view('livewire.products.show-products', [
+            'products' => $products,
+            'headers' => $headers,
+        ]);
     }
 }

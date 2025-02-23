@@ -8,12 +8,12 @@
         <x-select label="Category" :options="$categories" placeholder="Select a category" placeholder-value="0"
             wire:model="category_id" />
         <x-input label="Price" icon="o-currency-dollar" hint="Per batch" wire:model="price" />
-        <x-input label="Stock" icon="o-currency-dollar" wire:model="stock" />
-        <x-file label="image" accept="image/png, image/jpeg, image/jpg" wire:model="image">
+        <x-input label="Stock" wire:model="stock" />
+        <x-file label="image" accept="image/*" wire:model="image">
             @if ($image)
                 <img src="{{ $image->temporaryUrl() }}" class="h-40 rounded-lg" />
             @elseif ($oldImage)
-                <img src="{{ asset('storage2/' . $oldImage) }}" class="h-40 rounded-lg" />
+                <img src="{{ asset('local-storage/' . $oldImage) }}" class="h-40 rounded-lg" />
             @else
                 <img src="{{ asset('No_Image_Available.jpg') }}" class="h-40 rounded-lg" />
             @endif

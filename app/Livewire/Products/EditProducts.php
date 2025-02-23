@@ -2,21 +2,31 @@
 
 namespace App\Livewire\Products;
 
-use Mary\Traits\Toast;
-use Livewire\Component;
 use App\Models\Products;
-use Livewire\WithFileUploads;
-use Livewire\Attributes\Validate;
 use Illuminate\Support\Facades\Storage;
+use Livewire\Component;
+use Livewire\WithFileUploads;
+use Mary\Traits\Toast;
 
 class EditProducts extends Component
 {
-    use WithFileUploads, Toast;
+    use Toast, WithFileUploads;
 
     public $slug;
-    public $name, $category_id, $price, $stock;
+
+    public $name;
+
+    public $category_id;
+
+    public $price;
+
+    public $stock;
+
     public bool $status;
-    public $image, $oldImage;
+
+    public $image;
+
+    public $oldImage;
 
     public function mount($slug)
     {
@@ -24,7 +34,7 @@ class EditProducts extends Component
 
         $product = Products::where('slug', $slug)->first();
 
-        if (!$product) {
+        if (! $product) {
             abort(404);
         }
 
@@ -67,9 +77,7 @@ class EditProducts extends Component
             $validated['image'] = $this->oldImage; // Keep old image if new one not uploaded
         }
 
-
         $product->update($validated);
-
 
         $this->toast(
             type: 'success',
@@ -83,10 +91,10 @@ class EditProducts extends Component
         );
     }
 
-
     public function render()
     {
         $product = Products::where('slug', $this->slug)->first();
+
         return view('livewire.products.edit-products', ['product' => $product]);
     }
 }

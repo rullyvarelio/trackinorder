@@ -2,17 +2,15 @@
 
 namespace App\Models;
 
-use App\Models\Stock;
-use App\Models\StockIn;
-use App\Models\StockOut;
-use Illuminate\Database\Eloquent\Model;
 use Cviebrock\EloquentSluggable\Sluggable;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Products extends Model
 {
     use HasFactory, Sluggable;
+
     protected $fillable = [
         'name',
         'category_id',
@@ -21,7 +19,6 @@ class Products extends Model
         'status',
         'image',
     ];
-
 
     /**
      * Get the category that owns the product.
@@ -51,12 +48,8 @@ class Products extends Model
     //     return $this->belongsToMany(Order::class)->withPivot('quantity', 'subtotal');
     // }
 
-
-
     /**
      * Return the sluggable configuration array for this model.
-     *
-     * @return array
      */
     public function sluggable(): array
     {
@@ -64,7 +57,7 @@ class Products extends Model
             'slug' => [
                 'source' => 'name',
                 'onUpdate' => true,
-            ]
+            ],
         ];
     }
 

@@ -23,8 +23,8 @@ class ProductsFactory extends Factory
             'category_id' => Categories::factory(),
             'slug' => Str::slug(fake()->sentence()),
             'price' => fake()->numberBetween(1000, 10000),
-            'stock' => rand(10, 100),
-            'status' => true,
+            'stock' => 0,
+            'status' => false,
             'image' => null,
         ];
     }

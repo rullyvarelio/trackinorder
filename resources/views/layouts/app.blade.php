@@ -9,12 +9,22 @@
     <title>{{ $title ?? 'Trackin Order' }}</title>
 </head>
 
-<body class="font-sans antialiased">
+<body class="min-h-screen font-sans antialiased bg-base-200/50 dark:bg-base-200">
+    <x-nav sticky class="lg:hidden">
+        <x-slot:brand>
+            <div class="ml-5 font-bold">Trackin Order</div>
+        </x-slot:brand>
+        <x-slot:actions>
+            <label for="main-drawer" class="lg:hidden mr-3">
+                <x-icon name="o-bars-3" class="cursor-pointer" />
+            </label>
+        </x-slot:actions>
+    </x-nav>
 
-    <x-navbar />
-    <x-main with-nav full-width>
+    <x-main full-width>
         <x-sidebar />
         <x-slot:content>
+            <x-theme-toggle class="absolute right-2 top-3" darkTheme="business" lightTheme="corporate" />
             {{ $slot }}
         </x-slot:content>
     </x-main>
