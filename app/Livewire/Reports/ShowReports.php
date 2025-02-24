@@ -32,7 +32,7 @@ class ShowReports extends Component
 
     public function render()
     {
-        $orders = Order::where('status', 'paid')->get();
+        $orders = Order::where('status', '!=', 'pending')->get();
         $headers = [
             ['key' => 'loop', 'label' => '#'],
             ['key' => 'token_order', 'label' => 'Order'],

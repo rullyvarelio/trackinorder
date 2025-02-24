@@ -45,7 +45,6 @@ Route::get('dashboard/orders/create', CreateOrders::class)->name('orders.create'
 Route::get('dashboard/orders/{token_order}/pay', PayOrders::class)->name('orders.pay')->middleware('auth');
 
 Route::get('dashboard/reports', ShowReports::class)->name('reports.index')->middleware('auth');
-Route::get('/reports/export/{format}', [ReportExportController::class, 'export'])->name('reports.export');
-
+Route::get('reports/export/{format}', [ReportExportController::class, 'export'])->name('reports.export');
 
 Route::post('logout', LogoutController::class)->name('logout')->middleware('auth');

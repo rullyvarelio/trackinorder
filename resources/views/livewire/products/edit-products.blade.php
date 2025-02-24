@@ -8,7 +8,7 @@
         <x-select label="Category" :options="$categories" placeholder="Select a category" placeholder-value="0"
             wire:model="category_id" />
         <x-input label="Price" icon="o-currency-dollar" hint="Per batch" wire:model="price" />
-        <x-input label="Stock" wire:model="stock" />
+        <x-input label="Stock" wire:model="stock" readonly />
         <x-file label="image" accept="image/*" wire:model="image">
             @if ($image)
                 <img src="{{ $image->temporaryUrl() }}" class="h-40 rounded-lg" />

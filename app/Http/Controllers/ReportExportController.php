@@ -11,7 +11,11 @@ class ReportExportController extends Controller
     public function export($format)
     {
         $orders = Order::orderBy('created_at', 'desc')->get();
-        $orders->update(['status' => 'completed']);
+
+        $orders_transaction = Order::where('status', 'paid')->get();
+        foreach ($orders_transaction as $order) {
+            $order->update(['status' => 'completed']);
+        }
 
         if ($format === 'csv') {
             return $this->exportCSV($orders);

@@ -1,5 +1,9 @@
 <div>
-    <x-header title="Reports" />
+    <x-header title="Reports">
+        <x-slot:middle class="!justify-end">
+            <x-input icon="o-magnifying-glass" placeholder="Search..." />
+        </x-slot:middle>
+    </x-header>
     <x-table :headers="$headers" :rows="$orders">
         @scope('cell_loop', $order)
             {{ $loop->iteration }}

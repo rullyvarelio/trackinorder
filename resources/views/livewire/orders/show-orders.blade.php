@@ -28,6 +28,8 @@
                 <x-badge :value="Str::upper($order->status)" class="badge-error font-bold" />
             @elseif ($order->status == 'paid')
                 <x-badge :value="Str::upper($order->status)" class="badge-success font-bold" />
+            @elseif ($order->status == 'completed')
+                <x-badge :value="Str::upper($order->status)" class="badge-success font-bold" />
             @endif
         @endscope
         @scope('cell_action', $order)

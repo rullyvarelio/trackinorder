@@ -24,10 +24,10 @@
     <x-main full-width>
         <x-sidebar />
         <x-slot:content>
-            <x-theme-toggle class="absolute right-2 top-3" darkTheme="business" lightTheme="corporate" />
             {{ $slot }}
         </x-slot:content>
     </x-main>
+    <x-theme-toggle class="fixed right-2 bottom-3" darkTheme="business" lightTheme="corporate" />
     <x-toast />
     {{-- <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script> --}}
 </body>
