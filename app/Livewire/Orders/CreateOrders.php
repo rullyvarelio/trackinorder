@@ -9,6 +9,7 @@ use App\Models\Transaction;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use Livewire\Attributes\Validate;
 use Livewire\Component;
 use Mary\Traits\Toast;
 
@@ -16,6 +17,7 @@ class CreateOrders extends Component
 {
     use Toast;
 
+    #[Validate('required')]
     public array $selected;
 
     public array $products;
@@ -33,7 +35,7 @@ class CreateOrders extends Component
         ]);
 
         // Get selected products with quantity
-        $selectedProducts = collect($this->products)->filter(fn ($product) => isset($product['quantity']) && $product['quantity'] > 0);
+        $selectedProducts = collect($this->products)->filter(fn($product) => isset($product['quantity']) && $product['quantity'] > 0);
 
         if ($selectedProducts->isEmpty()) {
             $this->error(

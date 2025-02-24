@@ -47,7 +47,7 @@
             <x-menu-item title="Stock out" icon="o-arrow-up-on-square-stack" :link="route('stocks.out')" wire:navigate />
         </x-menu-sub>
         <x-menu-item title="Employees" icon="o-user-group" :link="route('employees.index')" wire:navigate />
-        <x-menu-item title="Reports" icon="o-document-chart-bar" link="reports" wire:navigate />
+        <x-menu-item title="Reports" icon="o-document-chart-bar" :link="route('reports.index')" wire:navigate />
         @if ($user->is_admin)
             <x-menu-separator />
             <x-menu-item title="Create Categories" icon="o-table-cells" link="admin/categories" wire:navigate />

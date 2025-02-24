@@ -12,8 +12,6 @@ class PayOrders extends Component
 {
     use Toast;
 
-    public $order_id;
-
     #[Validate('required')]
     public $token_order;
 
@@ -43,7 +41,6 @@ class PayOrders extends Component
             abort(404);
         }
 
-        $this->order_id = $order->order_id;
         $this->token_order = $order->token_order;
         $this->total_price = $order->total_price;
         $this->paid = $order->paid;
@@ -66,7 +63,7 @@ class PayOrders extends Component
 
         $validated = $this->validate();
 
-        $order = Order::where('order_id', $this->order_id);
+        $order = Order::where('token_order', $this->token_order);
         $order->update(['status' => 'paid']);
 
         $transaction = Transaction::where('token_order', $this->token_order)->first();

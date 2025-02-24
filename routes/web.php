@@ -1,21 +1,24 @@
 <?php
 
-use App\Http\Controllers\LogoutController;
-use App\Livewire\Dashboard;
-use App\Livewire\Employees\CreateEmployees;
-use App\Livewire\Employees\EditEmployees;
-use App\Livewire\Employees\ShowEmployees;
 use App\Livewire\Login;
-use App\Livewire\Orders\CreateOrders;
+use App\Livewire\Dashboard;
+use App\Livewire\Stocks\StockIns;
 use App\Livewire\Orders\PayOrders;
+use App\Livewire\Stocks\ShowStock;
+use App\Livewire\Stocks\StockOuts;
 use App\Livewire\Orders\ShowOrders;
-use App\Livewire\Products\CreateProducts;
+use App\Livewire\Orders\CreateOrders;
+use App\Livewire\Reports\ShowReports;
+use Illuminate\Support\Facades\Route;
 use App\Livewire\Products\EditProducts;
 use App\Livewire\Products\ShowProducts;
-use App\Livewire\Stocks\ShowStock;
-use App\Livewire\Stocks\StockIns;
-use App\Livewire\Stocks\StockOuts;
-use Illuminate\Support\Facades\Route;
+use App\Livewire\Reports\FormatReports;
+use App\Livewire\Employees\EditEmployees;
+use App\Livewire\Employees\ShowEmployees;
+use App\Livewire\Products\CreateProducts;
+use App\Http\Controllers\LogoutController;
+use App\Livewire\Employees\CreateEmployees;
+use App\Http\Controllers\ReportExportController;
 
 Route::get('/', Login::class)->name('login')->middleware('guest');
 
@@ -40,5 +43,9 @@ Route::get('dashboard/employees/{slug}/edit', EditEmployees::class)->name('emplo
 Route::get('dashboard/orders', ShowOrders::class)->name('orders.index')->middleware('auth');
 Route::get('dashboard/orders/create', CreateOrders::class)->name('orders.create')->middleware('auth');
 Route::get('dashboard/orders/{token_order}/pay', PayOrders::class)->name('orders.pay')->middleware('auth');
+
+Route::get('dashboard/reports', ShowReports::class)->name('reports.index')->middleware('auth');
+Route::get('/reports/export/{format}', [ReportExportController::class, 'export'])->name('reports.export');
+
 
 Route::post('logout', LogoutController::class)->name('logout')->middleware('auth');
