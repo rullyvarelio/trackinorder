@@ -40,6 +40,7 @@
     <x-menu activate-by-route>
         <x-menu-item title="Home" icon="o-home" :link="route('dashboard')" wire:navigate />
         <x-menu-item title="Products" icon="o-archive-box" :link="route('products.index')" wire:navigate />
+        <x-menu-item title="Orders" icon="o-clipboard-document-list" :link="route('orders.index')" wire:navigate />
         <x-menu-sub title="Stock management" icon="o-inbox-stack">
             <x-menu-item title="Stocks" icon="o-square-2-stack" :link="route('stocks.index')" wire:navigate />
             <x-menu-item title="Stock in" icon="o-arrow-down-on-square-stack" :link="route('stocks.in')" wire:navigate />

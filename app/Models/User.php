@@ -38,10 +38,10 @@ class User extends Authenticatable
         'remember_token',
     ];
 
-    // public function order(): HasOne
-    // {
-    //     return $this->hasOne(Order::class);
-    // }
+    public function order(): HasOne
+    {
+        return $this->hasOne(Order::class);
+    }
 
     /**
      * Get the attributes that should be cast.

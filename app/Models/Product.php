@@ -43,10 +43,10 @@ class Product extends Model
         return $this->hasMany(StockOut::class);
     }
 
-    // public function orders()
-    // {
-    //     return $this->belongsToMany(Order::class)->withPivot('quantity', 'subtotal');
-    // }
+    public function orders()
+    {
+        return $this->belongsToMany(Order::class)->withPivot('quantity', 'subtotal');
+    }
 
     /**
      * Return the sluggable configuration array for this model.

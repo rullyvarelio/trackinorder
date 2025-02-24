@@ -6,6 +6,9 @@ use App\Livewire\Employees\CreateEmployees;
 use App\Livewire\Employees\EditEmployees;
 use App\Livewire\Employees\ShowEmployees;
 use App\Livewire\Login;
+use App\Livewire\Orders\CreateOrders;
+use App\Livewire\Orders\PayOrders;
+use App\Livewire\Orders\ShowOrders;
 use App\Livewire\Products\CreateProducts;
 use App\Livewire\Products\EditProducts;
 use App\Livewire\Products\ShowProducts;
@@ -33,5 +36,9 @@ Route::get('dashboard/stock/stock-out', StockOuts::class)->name('stocks.out')->m
 Route::get('dashboard/employees', ShowEmployees::class)->name('employees.index')->middleware('auth');
 Route::get('dashboard/employees/create', CreateEmployees::class)->name('employees.create')->middleware('auth');
 Route::get('dashboard/employees/{slug}/edit', EditEmployees::class)->name('employees.edit')->middleware('auth');
+
+Route::get('dashboard/orders', ShowOrders::class)->name('orders.index')->middleware('auth');
+Route::get('dashboard/orders/create', CreateOrders::class)->name('orders.create')->middleware('auth');
+Route::get('dashboard/orders/{token_order}/pay', PayOrders::class)->name('orders.pay')->middleware('auth');
 
 Route::post('logout', LogoutController::class)->name('logout')->middleware('auth');
