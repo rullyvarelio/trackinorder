@@ -32,6 +32,9 @@ class StockIns extends Component
     #[Validate('nullable')]
     public $notes;
 
+    #[Validate('required')]
+    public $type = 'in';
+
     public function save()
     {
         $this->invoice_number = Str::random(4).date('Ymd');
@@ -42,6 +45,7 @@ class StockIns extends Component
 
         $stock = Stock::firstOrCreate(['product_id' => $this->product_id]);
         $stock->quantity += $this->quantity;
+        $stock->type = $this->type;
         $stock->save();
 
         Product::where('id', $this->product_id)->update(['stock' => $stock->quantity]);

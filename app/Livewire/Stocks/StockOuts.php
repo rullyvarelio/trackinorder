@@ -3,6 +3,7 @@
 namespace App\Livewire\Stocks;
 
 use App\Models\Product;
+use App\Models\Stock;
 use App\Models\StockOut;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
@@ -27,6 +28,9 @@ class StockOuts extends Component
     #[Validate('nullable')]
     public $token_order;
 
+    #[Validate('required')]
+    public $type = 'out';
+
     public function save()
     {
         $validated = $this->validate();
@@ -49,6 +53,13 @@ class StockOuts extends Component
             if ($product->stock <= 0) {
                 $product->update(['status' => 0]);
             }
+
+            Stock::create([
+                'product_id' => $this->product_id,
+                'quantity' => $this->quantity,
+                'type' => $this->type,
+            ]);
+
             $this->success(
                 title: 'Stock removed successfully!',
                 description: null,

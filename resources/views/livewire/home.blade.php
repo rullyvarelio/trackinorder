@@ -3,34 +3,16 @@
     <x-header title="Overview" />
     <div class="grid gap-7 sm:grid-cols-2 lg:grid-cols-3 mb-10">
         <x-card title="Revenue" subtitle="This month" shadow>
-            <x-slot:menu class="bg-success rounded">
-                <x-icon name="o-chevron-up" class="cursor-pointer" />
-                <div class="text-sm">
-                    75%
-                </div>
-            </x-slot:menu>
             <div class="text-2xl font-bold ">
                 {{ '$' . number_format($revenue, 2) }}
             </div>
         </x-card>
         <x-card title="Orders" subtitle="This month" shadow>
-            <x-slot:menu class="bg-success rounded">
-                <x-icon name="o-chevron-up" class="cursor-pointer" />
-                <div class="text-sm">
-                    75%
-                </div>
-            </x-slot:menu>
             <div class="text-2xl font-bold ">
                 {{ $total_order }}
             </div>
         </x-card>
         <x-card title="MRR" subtitle="This year" shadow>
-            <x-slot:menu class="bg-success rounded">
-                <x-icon name="o-chevron-up" class="cursor-pointer" />
-                <div class="text-sm">
-                    75%
-                </div>
-            </x-slot:menu>
             <div class="text-2xl font-bold ">
                 {{ '$' . number_format($monthly_recurring_revenue, 2) }}
             </div>

@@ -2,19 +2,21 @@
 
 namespace Database\Seeders;
 
-use App\Models\Category;
+use App\Models\Order;
+use App\Models\OrderProduct;
 use App\Models\Product;
 use Illuminate\Database\Seeder;
 
-class ProductSeeder extends Seeder
+class OrderProductSeeder extends Seeder
 {
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
-        Product::factory(15)->recycle(
-            Category::all(),
+        OrderProduct::factory(30)->recycle(
+            Order::all(),
+            Product::all()
         )->create();
     }
 }

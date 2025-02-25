@@ -12,20 +12,6 @@ class CategorySeeder extends Seeder
      */
     public function run(): void
     {
-        Category::create([
-            'name' => 'Food',
-            'color' => 'red',
-            'slug' => 'food',
-        ]);
-        Category::create([
-            'name' => 'Drink',
-            'color' => 'blue',
-            'slug' => 'drink',
-        ]);
-        Category::create([
-            'name' => 'Snack',
-            'color' => 'yellow',
-            'slug' => 'snack',
-        ]);
+        Category::factory(8)->create();
     }
 }

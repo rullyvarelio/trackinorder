@@ -7,7 +7,7 @@
             <x-button link="{{ route('products.create') }}" icon="o-plus" class="btn-primary" />
         </x-slot:actions>
     </x-header>
-    <x-card shadow>
+    <x-card shadow class="overflow-x-auto">
         <table class="table table-zebra">
             <thead>
                 <tr>
@@ -53,6 +53,8 @@
                 @endforeach
             </tbody>
         </table>
-        {{ $products->links() }}
+        <div class="my-2">
+            {{ $products->links() }}
+        </div>
     </x-card>
 </div>

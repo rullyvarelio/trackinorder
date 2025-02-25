@@ -32,7 +32,10 @@
                 @endforeach
             </tbody>
         </table>
-        {{ $orders->links() }}
+
+        <div class="my-2">
+            {{ $orders->links() }}
+        </div>
         <x-slot:actions>
             <x-modal wire:model="myModal1" title="Export file">
                 <div>Export as CSV?</div>

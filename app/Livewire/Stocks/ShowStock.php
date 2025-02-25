@@ -2,23 +2,20 @@
 
 namespace App\Livewire\Stocks;
 
-use App\Models\Product;
+use App\Models\Stock;
 use Livewire\Component;
+use Livewire\WithPagination;
 
 class ShowStock extends Component
 {
+    use WithPagination;
+
     public function render()
     {
-        $products = Product::with('category')->paginate(10);
-
-        $headers = [
-            ['key' => 'name', 'label' => 'Name'],
-            ['key' => 'stock', 'label' => 'Stock'],
-            ['key' => 'status', 'label' => 'Status'],
-        ];
+        $stocks = Stock::with('product')->paginate(10);
 
         return view('livewire.stocks.show-stock', [
-            'products' => $products,
+            'stocks' => $stocks,
         ]);
     }
 }

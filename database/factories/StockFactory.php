@@ -2,13 +2,14 @@
 
 namespace Database\Factories;
 
+use App\Models\Product;
+use App\Models\StockIn;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Str;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Category>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Stock>
  */
-class CategoryFactory extends Factory
+class StockFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -17,9 +18,9 @@ class CategoryFactory extends Factory
      */
     public function definition(): array
     {
-
         return [
-            'name' => Str::ucfirst(fake()->unique()->word()),
+            'product_id' => Product::factory(),
+            'quantity' => StockIn::factory(),
         ];
     }
 }

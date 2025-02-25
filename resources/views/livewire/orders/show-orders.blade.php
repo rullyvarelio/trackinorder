@@ -69,6 +69,8 @@
                 @endforeach
             </tbody>
         </table>
-        {{ $orders->links() }}
+        <div class="my-2">
+            {{ $orders->links() }}
+        </div>
     </x-card>
 </div>
