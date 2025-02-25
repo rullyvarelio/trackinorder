@@ -9,13 +9,13 @@ use Livewire\WithPagination;
 
 class ShowProducts extends Component
 {
-    public bool $myModal1 = false;
-
     use WithPagination;
 
-    public function delete($id)
+    public bool $myModal1 = false;
+
+    public function delete($slug)
     {
-        $product = Product::where('id', $id)->first();
+        $product = Product::where('slug', $slug)->first();
 
         if ($product) {
             if ($product->image) {
@@ -31,20 +31,10 @@ class ShowProducts extends Component
 
     public function render()
     {
-        $products = Product::with('category')->paginate(5);
-
-        $headers = [
-            ['key' => 'name', 'label' => 'Name'],
-            ['key' => 'category.name', 'label' => 'Category'],
-            ['key' => 'price', 'label' => 'Price', 'format' => ['currency', '2,.', '$ ']],
-            ['key' => 'stock', 'label' => 'Stock'],
-            ['key' => 'status', 'label' => 'Status'],
-            ['key' => 'action', 'label' => 'Action'],
-        ];
+        $products = Product::with('category')->paginate(10);
 
         return view('livewire.products.show-products', [
             'products' => $products,
-            'headers' => $headers,
         ]);
     }
 }

@@ -6,12 +6,17 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
+use Livewire\WithPagination;
 
 class ShowEmployees extends Component
 {
-    public function delete($id)
+    use WithPagination;
+
+    public $myModal1 = false;
+
+    public function delete($slug)
     {
-        $user = User::where('id', $id)->first();
+        $user = User::where('slug', $slug)->first();
 
         if ($user) {
             if ($user->image) {
@@ -27,19 +32,10 @@ class ShowEmployees extends Component
 
     public function render()
     {
-        $users = User::all()->except(Auth::id());
-        $headers = [
-            ['key' => 'no', 'label' => '#'],
-            ['key' => 'employee', 'label' => 'Employee'],
-            ['key' => 'role', 'label' => 'Role'],
-            ['key' => 'joined', 'label' => 'Joined'],
-            ['key' => 'cta', 'label' => 'Action'],
-
-        ];
+        $users = User::where('id', '!=', Auth::id())->paginate(10);
 
         return view('livewire.employees.show-employees', [
             'users' => $users,
-            'headers' => $headers,
         ]);
     }
 }

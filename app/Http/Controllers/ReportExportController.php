@@ -28,7 +28,7 @@ class ReportExportController extends Controller
 
     private function exportCSV($orders)
     {
-        $filename = "orders_report_" . date('Y-m-d') . ".csv";
+        $filename = 'orders_report_'.date('Y-m-d').'.csv';
         $handle = fopen('php://temp', 'w+');
 
         // Header row
@@ -57,6 +57,7 @@ class ReportExportController extends Controller
     private function exportPDF($orders)
     {
         $pdf = Pdf::loadView('file.pdf-format', compact('orders'));
-        return $pdf->download('orders_report_' . date('Y-m-d') . '.pdf');
+
+        return $pdf->download('orders_report_'.date('Y-m-d').'.pdf');
     }
 }

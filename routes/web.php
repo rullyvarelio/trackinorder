@@ -1,24 +1,23 @@
 <?php
 
-use App\Livewire\Login;
+use App\Http\Controllers\LogoutController;
+use App\Http\Controllers\ReportExportController;
 use App\Livewire\Dashboard;
-use App\Livewire\Stocks\StockIns;
-use App\Livewire\Orders\PayOrders;
-use App\Livewire\Stocks\ShowStock;
-use App\Livewire\Stocks\StockOuts;
-use App\Livewire\Orders\ShowOrders;
-use App\Livewire\Orders\CreateOrders;
-use App\Livewire\Reports\ShowReports;
-use Illuminate\Support\Facades\Route;
-use App\Livewire\Products\EditProducts;
-use App\Livewire\Products\ShowProducts;
-use App\Livewire\Reports\FormatReports;
+use App\Livewire\Employees\CreateEmployees;
 use App\Livewire\Employees\EditEmployees;
 use App\Livewire\Employees\ShowEmployees;
+use App\Livewire\Login;
+use App\Livewire\Orders\CreateOrders;
+use App\Livewire\Orders\PayOrders;
+use App\Livewire\Orders\ShowOrders;
 use App\Livewire\Products\CreateProducts;
-use App\Http\Controllers\LogoutController;
-use App\Livewire\Employees\CreateEmployees;
-use App\Http\Controllers\ReportExportController;
+use App\Livewire\Products\EditProducts;
+use App\Livewire\Products\ShowProducts;
+use App\Livewire\Reports\ShowReports;
+use App\Livewire\Stocks\ShowStock;
+use App\Livewire\Stocks\StockIns;
+use App\Livewire\Stocks\StockOuts;
+use Illuminate\Support\Facades\Route;
 
 Route::get('/', Login::class)->name('login')->middleware('guest');
 

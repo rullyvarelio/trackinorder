@@ -35,7 +35,7 @@ class CreateOrders extends Component
         ]);
 
         // Get selected products with quantity
-        $selectedProducts = collect($this->products)->filter(fn($product) => isset($product['quantity']) && $product['quantity'] > 0);
+        $selectedProducts = collect($this->products)->filter(fn ($product) => isset($product['quantity']) && $product['quantity'] > 0);
 
         if ($selectedProducts->isEmpty()) {
             $this->error(

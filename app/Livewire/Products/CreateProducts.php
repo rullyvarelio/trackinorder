@@ -34,13 +34,14 @@ class CreateProducts extends Component
     #[Validate('image|file|nullable')]
     public $image;
 
+    public function mount()
+    {
+        $this->stock = 0;
+        $this->status = false;
+    }
+
     public function save()
     {
-        if ($this->stock > 0) {
-            $this->status = true;
-        } else {
-            $this->status = false;
-        }
 
         if ($this->name) {
             $this->slug = SlugService::createSlug(Product::class, 'slug', $this->name);

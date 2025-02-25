@@ -9,7 +9,7 @@ class ShowStock extends Component
 {
     public function render()
     {
-        $products = Product::with('category')->paginate(5);
+        $products = Product::with('category')->paginate(10);
 
         $headers = [
             ['key' => 'name', 'label' => 'Name'],
@@ -19,7 +19,6 @@ class ShowStock extends Component
 
         return view('livewire.stocks.show-stock', [
             'products' => $products,
-            'headers' => $headers,
         ]);
     }
 }

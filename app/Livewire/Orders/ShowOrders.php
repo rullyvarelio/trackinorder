@@ -13,6 +13,8 @@ class ShowOrders extends Component
 {
     use Toast;
 
+    public bool $myModal1 = false;
+
     public function cancel($token_order)
     {
         $order = Order::where('token_order', $token_order)->where('status', 'pending')->first();
@@ -53,20 +55,10 @@ class ShowOrders extends Component
 
     public function render()
     {
-        $orders = Order::with('user')->get();
-        $headers = [
-            ['key' => 'loop', 'label' => '#'],
-            ['key' => 'token_order', 'label' => 'Order'],
-            ['key' => 'by', 'label' => 'Placed by'],
-            ['key' => 'total_price', 'label' => 'Total price'],
-            ['key' => 'created_at', 'label' => 'Date'],
-            ['key' => 'status', 'label' => 'Status'],
-            ['key' => 'action', 'label' => 'Action'],
-        ];
+        $orders = Order::with('user')->paginate(10);
 
         return view('livewire.orders.show-orders', [
             'orders' => $orders,
-            'headers' => $headers,
         ]);
     }
 }

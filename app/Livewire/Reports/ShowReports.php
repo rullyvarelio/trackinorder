@@ -3,12 +3,16 @@
 namespace App\Livewire\Reports;
 
 use App\Models\Order;
-use Mary\Traits\Toast;
 use Livewire\Component;
+use Mary\Traits\Toast;
 
 class ShowReports extends Component
 {
     use Toast;
+
+    public bool $myModal1 = false;
+
+    public bool $myModal2 = false;
 
     public function report($format)
     {
@@ -29,21 +33,12 @@ class ShowReports extends Component
         );
     }
 
-
     public function render()
     {
-        $orders = Order::where('status', '!=', 'pending')->get();
-        $headers = [
-            ['key' => 'loop', 'label' => '#'],
-            ['key' => 'token_order', 'label' => 'Order'],
-            ['key' => 'total_price', 'label' => 'Total price'],
-            ['key' => 'status', 'label' => 'Status'],
-            ['key' => 'created_at', 'label' => 'Date'],
-        ];
+        $orders = Order::where('status', '!=', 'pending')->where('status', '!=', 'canceled')->paginate(10);
 
         return view('livewire.reports.show-reports', [
             'orders' => $orders,
-            'headers' => $headers,
         ]);
     }
 }

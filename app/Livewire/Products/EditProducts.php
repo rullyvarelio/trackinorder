@@ -48,6 +48,13 @@ class EditProducts extends Component
 
     public function update()
     {
+
+        if ($this->stock > 0) {
+            $this->status = true;
+        } else {
+            $this->status = false;
+        }
+
         $validated = $this->validate([
             'name' => 'required',
             'category_id' => 'required|exists:categories,id',
@@ -58,12 +65,6 @@ class EditProducts extends Component
         ]);
 
         $product = Product::where('slug', $this->slug)->firstOrFail();
-
-        if ($this->stock > 0) {
-            $this->status = true;
-        } else {
-            $this->status = false;
-        }
 
         if ($this->image) {
             $path = $this->image->store('product_images');

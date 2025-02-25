@@ -7,7 +7,8 @@
         <x-input label="Name" wire:model="name" />
         <x-select label="Category" :options="$categories" placeholder="Select a category" placeholder-value="0"
             wire:model="category_id" />
-        <x-input label="Price" icon="o-currency-dollar" hint="Per batch" wire:model="price" />
+        <x-input label="Price" icon="o-currency-dollar" hint="Per batch" wire:model="price" type="number"
+            min="0" />
         <x-input label="Stock" wire:model="stock" readonly />
         <x-file label="image" accept="image/png, image/jpeg, image/jpg" wire:model="image">
             <img src="{{ asset('No_Image_Available.jpg') }}" class="h-40 rounded-lg" />

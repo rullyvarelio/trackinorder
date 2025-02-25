@@ -13,7 +13,7 @@ class ProductSeeder extends Seeder
      */
     public function run(): void
     {
-        Product::factory(5)->recycle(
+        Product::factory(10)->recycle(
             Category::all('id')
         )->create();
     }
