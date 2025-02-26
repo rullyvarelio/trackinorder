@@ -21,7 +21,6 @@
                 </tr>
             </thead>
             <tbody>
-
                 @foreach ($orders as $order)
                     <tr>
                         <td>{{ $orders->firstItem() + $loop->index }}</td>
@@ -50,15 +49,9 @@
                             @if ($order->status == 'pending')
                                 <x-button link="{{ route('orders.pay', $order->token_order) }}" icon="o-banknotes"
                                     class="btn-success btn-sm" tooltip="Payment" />
-                                <x-modal wire:model="myModal1" title="Order cancellation">
-                                    <div class="mb-5">Are you sure you want to cancel this order?</div>
-                                    <x-slot:actions>
-                                        <x-button label="Cancel" @click="$wire.myModal1 = false" />
-                                        <x-button label="Confirm" wire:click="cancel('{{ $order->token_order) }}')"
-                                            class="btn-error" @click="$wire.myModal1 = false" />
-                                    </x-slot:actions>
-                                </x-modal>
-                                <x-button icon="o-trash" class="btn-error btn-sm" @click="$wire.myModal1 = true" />
+                                <x-button icon="o-trash" class="btn-error btn-sm"
+                                    wire:click="cancel({{ $order->id }})"
+                                    wire:confirm="Are you sure you want to cancel this order?" />
                             @else
                                 <x-kbd>
                                     {{ Str::upper($order->status) }}

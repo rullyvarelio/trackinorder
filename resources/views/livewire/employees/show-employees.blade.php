@@ -54,15 +54,8 @@
                         </td>
                         <td>
                             <x-button :link="route('employees.edit', $user->slug)" icon="o-pencil-square" class="btn-warning btn-sm" />
-                            <x-modal wire:model="myModal1" title="Order cancellation">
-                                <div class="mb-5">Are you sure you want to cancel this order?</div>
-                                <x-slot:actions>
-                                    <x-button label="Cancel" @click="$wire.myModal1 = false" />
-                                    <x-button label="Confirm" wire:click="delete('{{ $user->slug }}')"
-                                        class="btn-error" @click="$wire.myModal1 = false" />
-                                </x-slot:actions>
-                            </x-modal>
-                            <x-button icon="o-trash" class="btn-error btn-sm" @click="$wire.myModal1 = true" />
+                            <x-button icon="o-trash" class="btn-error btn-sm" wire:click="delete({{ $user->id }})"
+                                wire:confirm="Are you sure you want to delete this user?" />
                         </td>
                     </tr>
                 @endforeach

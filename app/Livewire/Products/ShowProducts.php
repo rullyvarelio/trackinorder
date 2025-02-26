@@ -6,27 +6,33 @@ use App\Models\Product;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Mary\Traits\Toast;
 
 class ShowProducts extends Component
 {
-    use WithPagination;
+    use Toast, WithPagination;
 
-    public bool $myModal1 = false;
-
-    public function delete($slug)
+    public function delete($id)
     {
-        $product = Product::where('slug', $slug)->first();
+        $product = Product::find($id);
 
-        if ($product) {
-            if ($product->image) {
-                Storage::delete($product->image);
-            }
+        $product->delete();
 
-            $product->delete();
-            session()->flash('success', 'Product deleted successfully!');
-        } else {
-            session()->flash('error', 'Product not found!');
+        if ($product->image) {
+            Storage::delete($product->image);
+
+            return;
         }
+
+        $this->success(
+            title: 'Produc successfully deleted!',
+            description: null,
+            position: 'toast-top toast-end',
+            icon: 'o-information-circle',
+            css: 'alert-success',
+            timeout: 3000,
+            redirectTo: null
+        );
     }
 
     public function render()

@@ -39,15 +39,8 @@
                         <td>
                             <x-button link="{{ route('products.edit', $product->slug) }}" icon="o-pencil-square"
                                 class="btn-warning btn-sm" />
-                            <x-modal wire:model="myModal1" title="Delete confirmation">
-                                <div class="mb-5">Are you sure you want to delete this product?</div>
-                                <x-slot:actions>
-                                    <x-button label="Cancel" @click="$wire.myModal1 = false" />
-                                    <x-button label="Confirm" wire:click="delete('{{ $product->slug }}')"
-                                        class="btn-error" @click="$wire.myModal1 = false" />
-                                </x-slot:actions>
-                            </x-modal>
-                            <x-button icon="o-trash" class="btn-error btn-sm" @click="$wire.myModal1 = true" />
+                            <x-button icon="o-trash" class="btn-error btn-sm" wire:click="delete({{ $product->id }})"
+                                wire:confirm="Are you sure you want to delete this product?" />
                         </td>
                     </tr>
                 @endforeach

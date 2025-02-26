@@ -3,6 +3,7 @@
 namespace App\Livewire\Orders;
 
 use App\Models\Order;
+use App\Models\OrderProduct;
 use App\Models\Product;
 use App\Models\StockOut;
 use App\Models\Transaction;
@@ -13,20 +14,29 @@ class ShowOrders extends Component
 {
     use Toast;
 
-    public bool $myModal1 = false;
-
-    public function cancel($token_order)
+    public function cancel($id)
     {
-        $order = Order::where('token_order', $token_order)->where('status', 'pending')->first();
+        $order = Order::find($id);
 
         if (! $order) {
-            return back()->with('error', 'Order cannot be canceled.');
+            $this->error(
+                title: 'Order not found!',
+                description: 'The order you are trying to cancel does not exist.',
+                position: 'toast-top toast-end',
+                icon: 'o-x-circle',
+                css: 'alert-error',
+                timeout: 3000,
+                redirectTo: null
+            );
+
+            return;
         }
 
-        $stockOuts = StockOut::where('token_order', $order->token_order)->get();
+        $stockOuts = StockOut::where('order_id', $id)->get();
 
         foreach ($stockOuts as $stockOut) {
             $product = Product::find($stockOut->product_id);
+
             if ($product) {
                 $product->increment('stock', $stockOut->quantity);
             }
@@ -34,7 +44,8 @@ class ShowOrders extends Component
         }
 
         // Delete the transaction linked to this order
-        Transaction::where('order_id', $order->id)->delete();
+        OrderProduct::where('order_id', $id)->delete();
+        Transaction::where('order_id', $id)->delete();
 
         // Update order status and token in one go
         $order->update([

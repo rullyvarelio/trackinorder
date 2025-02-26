@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreignId('category_id')->constrained(
                 table: 'categories',
                 indexName: 'products_category_id'
-            );
+            )->onDelete('cascade');
             $table->string('slug')->unique();
             $table->decimal('price', 10, 2)->unsigned();
             $table->integer('stock')->unsigned();

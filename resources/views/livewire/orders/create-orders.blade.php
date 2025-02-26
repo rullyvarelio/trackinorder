@@ -2,12 +2,39 @@
     <x-header title="Create Order" />
     <x-card shadow>
         <x-form wire:submit="save" no-separator>
-            <x-table :headers="$headers" :rows="$products" wire:model="selected" selectable>
-                @scope('cell_quantity', $order)
-                    <x-input type="number" wire:model="products.{{ $order['id'] }}.quantity" min="1"
-                        max="{{ $order['stock'] }}" style="width: 80px;" />
-                @endscope
-            </x-table>
+            <table class="table table-zebra">
+                <thead>
+                    <tr>
+                        <td>#</td>
+                        <td>Name</td>
+                        <td>Price</td>
+                        <td>Stock</td>
+                        <td>Qty</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($products as $product)
+                        <tr>
+                            <td>
+                                <x-checkbox type="checkbox" wire:model.live="selectProduct.{{ $product->id }}" />
+                            </td>
+                            <td>
+                                {{ $product->name }}
+                            </td>
+                            <td>
+                                {{ $product->price }}
+                            </td>
+                            <td>
+                                {{ $product->stock }}
+                            </td>
+                            <td>
+                                <x-input type="number" wire:model.live="quantity.{{ $product->id }}" min="1"
+                                    max="{{ $product->stock }}" style="width: 80px;" />
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
             <x-slot:actions>
                 <x-button label="Cancel" :link="route('orders.index')" />
                 <x-button label="Save Order" class="btn-primary" type="submit" spinner="save4" />

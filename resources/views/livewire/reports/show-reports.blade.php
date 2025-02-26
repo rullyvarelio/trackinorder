@@ -37,26 +37,10 @@
             {{ $orders->links() }}
         </div>
         <x-slot:actions>
-            <x-modal wire:model="myModal1" title="Export file">
-                <div>Export as CSV?</div>
-
-                <x-slot:actions>
-                    <x-button label="Cancel" @click="$wire.myModal1 = false" />
-                    <x-button label="Confirm" class="btn-primary" wire:click="report('csv')" spinner />
-                </x-slot:actions>
-            </x-modal>
-            <x-modal wire:model="myModal2" title="Export file">
-                <div>Export as PDF?</div>
-
-                <x-slot:actions>
-                    <x-button label="Cancel" @click="$wire.myModal2 = false" />
-                    <x-button label="Confirm" class="btn-primary" wire:click="report('pdf')" spinner />
-                </x-slot:actions>
-            </x-modal>
-            <x-button label="Export as CSV" icon="o-arrow-down-tray" class="btn-primary"
-                @click="$wire.myModal1 = true" />
-            <x-button label="Export as PDF" icon="o-arrow-down-tray" class="btn-secondary"
-                @click="$wire.myModal2 = true" />
+            <x-button label="Export as CSV" icon="o-arrow-down-tray" class="btn-primary" wire:click="report('csv')"
+                wire:confirm="Are you sure you want to download this file?" />
+            <x-button label="Export as PDF" icon="o-arrow-down-tray" class="btn-secondary" wire:click="report('pdf')"
+                wire:confirm="Are you sure you want to download this file?" />
         </x-slot:actions>
     </x-card>
 </div>

@@ -10,10 +10,6 @@ class ShowReports extends Component
 {
     use Toast;
 
-    public bool $myModal1 = false;
-
-    public bool $myModal2 = false;
-
     public function report($format)
     {
         if ($format === 'csv') {

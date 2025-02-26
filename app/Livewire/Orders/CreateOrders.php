@@ -4,12 +4,11 @@ namespace App\Livewire\Orders;
 
 use App\Models\Order;
 use App\Models\Product;
+use App\Models\Stock;
 use App\Models\StockOut;
 use App\Models\Transaction;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
-use Livewire\Attributes\Validate;
 use Livewire\Component;
 use Mary\Traits\Toast;
 
@@ -17,29 +16,15 @@ class CreateOrders extends Component
 {
     use Toast;
 
-    #[Validate('required')]
-    public array $selected;
+    public $selectProduct = [];
 
-    public array $products;
-
-    public function mount()
-    {
-        $this->products = Product::where('stock', '>', 0)->get()->keyBy('id')->toArray();
-    }
+    public $quantity = [];
 
     public function save()
     {
-        // Validate input
-        $this->validate([
-            'products.*.quantity' => 'integer|min:1',
-        ]);
-
-        // Get selected products with quantity
-        $selectedProducts = collect($this->products)->filter(fn ($product) => isset($product['quantity']) && $product['quantity'] > 0);
-
-        if ($selectedProducts->isEmpty()) {
+        if (empty(array_filter($this->selectProduct))) {
             $this->error(
-                title: 'No products selected!',
+                title: 'No product selected!',
                 description: null,
                 position: 'toast-top toast-end',
                 icon: 'o-information-circle',
@@ -51,86 +36,100 @@ class CreateOrders extends Component
             return;
         }
 
-        $tokenOrder = Str::random(20);
+        $totalPrice = 0;
+        $tokenOrder = uniqid('ORD'.Str::random(12), true);
+        $stockOutEntries = [];
+        $stockEntries = [];
 
-        // Create the order
         $order = Order::create([
             'user_id' => Auth::id(),
-            'total_price' => 0, // Will be updated later
+            'total_price' => $totalPrice, // Will be updated later
             'status' => 'pending',
             'token_order' => $tokenOrder,
         ]);
 
-        $totalPrice = 0;
-        $stockOutEntries = [];
+        foreach ($this->selectProduct as $productId => $isSelected) {
+            if ($isSelected) {
+                if (! isset($this->quantity[$productId]) || $this->quantity[$productId] <= 0) {
+                    $this->warning(
+                        title: 'Quantity required!',
+                        description: 'Please enter a valid quantity for the selected product.',
+                        position: 'toast-top toast-end',
+                        icon: 'o-exclamation-triangle',
+                        css: 'alert-warning',
+                        timeout: 3000,
+                        redirectTo: null
+                    );
 
-        // Create order items and update stock
-        foreach ($selectedProducts as $productId => $product) {
-            // Fetch product as an object from DB
-            $product_draft = Product::find($productId);
-
-            if (! $product_draft) {
-                continue; // Skip if product not found
+                    return;
+                }
             }
 
-            $quantity = (int) $product['quantity'];
+            $draft_order = Product::find($productId);
+            $quantity = (int) $this->quantity[$productId];
 
-            if ($quantity <= 0 || $quantity > $product_draft->stock) {
-                $this->error(
-                    title: "Invalid quantity for {$product_draft->name}!",
-                    description: null,
-                    position: 'toast-top toast-end',
-                    icon: 'o-information-circle',
-                    css: 'alert-error',
-                    timeout: 3000,
-                    redirectTo: null
-                );
-
-                continue;
-            }
-
-            $subtotal = $product_draft->price * $quantity;
+            $subtotal = $draft_order->price * $quantity;
             $totalPrice += $subtotal;
 
-            // Attach to order
-            $order->products()->attach($product_draft->id, [
+            $order->products()->attach($draft_order->id, [
                 'quantity' => $quantity,
                 'subtotal' => $subtotal,
             ]);
 
-            // Stock out entry
             $stockOut = StockOut::create([
-                'product_id' => $product_draft->id,
+                'product_id' => $draft_order->id,
                 'quantity' => $quantity,
-                'reason' => 'Sold', // Reason for stock out
+                'reason' => 'Sold',
                 'used_date' => now(),
                 'token_order' => $tokenOrder,
             ]);
 
+            $stock = Stock::create([
+                'product_id' => $draft_order->id,
+                'quantity' => $quantity,
+                'type' => 'out',
+            ]);
             $stockOutEntries[] = $stockOut->id;
+            $stockEntries[] = $stock->id;
 
-            // Reduce stock
-            $product_draft->decrement('stock', $quantity);
+            $draft_order->decrement('stock', $quantity);
 
-            if ($product_draft->stock <= 0) {
-                $product_draft->update(['status' => 0]);
+            if ($draft_order->stock <= 0) {
+                $draft_order->update(['status' => 0]);
             }
         }
 
-        // Update order total price
         $order->update(['total_price' => $totalPrice]);
 
-        // Create transaction
         Transaction::create([
             'order_id' => $order->id,
             'token_order' => $tokenOrder,
             'total_price' => $totalPrice,
         ]);
+
+        foreach ($this->quantity as $productId => $qty) {
+            if (! isset($this->selectProduct[$productId]) || ! $this->selectProduct[$productId]) {
+                if ($qty > 0) {
+                    $this->warning(
+                        title: 'Product not selected!',
+                        description: 'Please check the product before entering quantity.',
+                        position: 'toast-top toast-end',
+                        icon: 'o-exclamation-triangle',
+                        css: 'alert-warning',
+                        timeout: 3000,
+                        redirectTo: null
+                    );
+
+                    return;
+                }
+            }
+        }
+
         $this->success(
-            title: 'Order successfully created!',
+            title: 'Order saved successfully!',
             description: null,
             position: 'toast-top toast-end',
-            icon: 'o-information-circle',
+            icon: 'o-exclamation-triangle',
             css: 'alert-success',
             timeout: 3000,
             redirectTo: route('orders.index')
@@ -140,17 +139,9 @@ class CreateOrders extends Component
     public function render()
     {
         $products = Product::all()->where('stock', '>', 0);
-        $headers = [
-            ['key' => 'id', 'label' => '#', 'class' => 'w-1'],
-            ['key' => 'name', 'label' => 'Name'],
-            ['key' => 'price', 'label' => 'Price', 'format' => ['currency', '2,.', '$ ']],
-            ['key' => 'stock', 'label' => 'Stock'],
-            ['key' => 'quantity', 'label' => 'Qty.'],
-        ];
 
         return view('livewire.orders.create-orders', [
             'products' => $products,
-            'headers' => $headers,
         ]);
     }
 }

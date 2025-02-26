@@ -7,26 +7,41 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Mary\Traits\Toast;
 
 class ShowEmployees extends Component
 {
-    use WithPagination;
+    use Toast, WithPagination;
 
-    public $myModal1 = false;
-
-    public function delete($slug)
+    public function delete($id)
     {
-        $user = User::where('slug', $slug)->first();
+        $user = User::find($id);
 
         if ($user) {
             if ($user->image) {
                 Storage::delete($user->image);
             }
-
             $user->delete();
-            session()->flash('success', 'Product deleted successfully!');
+
+            $this->success(
+                title: 'Employee successfully deleted!',
+                description: null,
+                position: 'toast-top toast-end',
+                icon: 'o-information-circle',
+                css: 'alert-warning',
+                timeout: 3000,
+                redirectTo: null
+            );
         } else {
-            session()->flash('error', 'Product not found!');
+            $this->error(
+                title: 'Error, please try again!',
+                description: null,
+                position: 'toast-top toast-end',
+                icon: 'o-information-circle',
+                css: 'alert-error',
+                timeout: 3000,
+                redirectTo: null
+            );
         }
     }
 
