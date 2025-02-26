@@ -33,7 +33,7 @@
                             @if ($product->status)
                                 <x-badge value="Available" class="badge-success" />
                             @else
-                                <x-badge value="Not available" class="badge-error" />
+                                <x-badge value="Out of stock" class="badge-error" />
                             @endif
                         </td>
                         <td>

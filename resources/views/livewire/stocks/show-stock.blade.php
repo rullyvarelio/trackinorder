@@ -1,5 +1,9 @@
 <div>
-    <x-header title="Stocks" />
+    <x-header title="Stocks">
+        <x-slot:middle class="!justify-end">
+            <x-input icon="o-magnifying-glass" placeholder="Search..." />
+        </x-slot:middle>
+    </x-header>
     <x-card shadow>
         <table class="table table-zebra">
             <thead>

@@ -74,7 +74,7 @@ class StockOuts extends Component
 
     public function render()
     {
-        $products = Product::all();
+        $products = Product::all()->where('status', true);
         $reasons = [
             ['id' => 1, 'name' => 'Expired'],
             ['id' => 2, 'name' => 'Damaged'],

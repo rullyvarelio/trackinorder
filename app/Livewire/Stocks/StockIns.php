@@ -37,18 +37,22 @@ class StockIns extends Component
 
     public function save()
     {
-        $this->invoice_number = Str::random(4).date('Ymd');
+        $this->invoice_number = Str::random(4) . date('Ymd');
 
         $validated = $this->validate();
 
         StockIn::create($validated);
 
-        $stock = Stock::firstOrCreate(['product_id' => $this->product_id]);
+        $stock = Stock::create([
+            'product_id' => $this->product_id,
+            'type' =>  $this->type
+        ]);
         $stock->quantity += $this->quantity;
-        $stock->type = $this->type;
         $stock->save();
 
-        Product::where('id', $this->product_id)->update(['stock' => $stock->quantity]);
+
+        $product =  Product::find($this->product_id);
+        $product->increment('stock', $stock->quantity);
 
         if ($stock->quantity) {
             Product::where('id', $this->product_id)->update(['status' => 1]);

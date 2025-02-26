@@ -54,7 +54,7 @@
                                     <div class="mb-5">Are you sure you want to cancel this order?</div>
                                     <x-slot:actions>
                                         <x-button label="Cancel" @click="$wire.myModal1 = false" />
-                                        <x-button label="Confirm" wire:click="cancel('{{ $order->token_order }}')"
+                                        <x-button label="Confirm" wire:click="cancel('{{ $order->token_order) }}')"
                                             class="btn-error" @click="$wire.myModal1 = false" />
                                     </x-slot:actions>
                                 </x-modal>
