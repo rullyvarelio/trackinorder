@@ -18,7 +18,7 @@ class Dashboard extends Component
             Carbon::now()->endOfMonth(),
         ])->sum('total_price');
 
-        $total_order = Order::where('status', 'completed')
+        $total_order = Order::where('status', 'paid')
             ->whereBetween('created_at', [
                 Carbon::now()->startOfMonth(),
                 Carbon::now()->endOfMonth(),
@@ -33,7 +33,7 @@ class Dashboard extends Component
         $entries = Product::with('category')
             ->leftJoin('order_product', 'products.id', '=', 'order_product.product_id')
             ->leftJoin('orders', 'order_product.order_id', '=', 'orders.id')
-            ->where('orders.status', 'completed')
+            ->where('orders.status', 'paid')
             ->whereBetween('orders.created_at', [
                 Carbon::now()->startOfMonth(),
                 Carbon::now()->endOfMonth(),

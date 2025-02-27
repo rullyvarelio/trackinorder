@@ -12,9 +12,4 @@ class StockOut extends Model
     protected $table = 'stock_outs';
 
     protected $fillable = ['product_id', 'quantity', 'reason', 'used_date', 'token_order'];
-
-    public function product()
-    {
-        return $this->belongsTo(Product::class);
-    }
 }

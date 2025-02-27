@@ -2,10 +2,10 @@
 
 namespace App\Models;
 
-use Cviebrock\EloquentSluggable\Sluggable;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Product extends Model
 {
@@ -33,20 +33,6 @@ class Product extends Model
         return $this->hasOne(Stock::class);
     }
 
-    public function stockIn()
-    {
-        return $this->hasMany(StockIn::class);
-    }
-
-    public function stockOut()
-    {
-        return $this->hasMany(StockOut::class);
-    }
-
-    public function orders()
-    {
-        return $this->belongsToMany(Order::class)->withPivot('quantity', 'subtotal');
-    }
 
     /**
      * Return the sluggable configuration array for this model.
@@ -59,11 +45,5 @@ class Product extends Model
                 'onUpdate' => true,
             ],
         ];
-    }
-
-    public function setStockAttribute($value)
-    {
-        $this->attributes['stock'] = $value;
-        $this->attributes['status'] = $value > 0;
     }
 }

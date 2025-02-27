@@ -17,9 +17,4 @@ class Transaction extends Model
         'paid',
         'changes',
     ];
-
-    public function order(): HasOne
-    {
-        return $this->hasOne(Order::class);
-    }
 }
