@@ -1,6 +1,6 @@
 <div>
     <x-header title="Create Employee" />
-    <x-card shadow>
+    <x-card shadow shadow class="overflow-x-auto">
         <x-form wire:submit="update" no-separator>
             <x-input label="Name" hint="Your full name" wire:model="name" />
             <x-input label="Email" wire:model="email" />

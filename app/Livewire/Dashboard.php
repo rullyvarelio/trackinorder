@@ -30,10 +30,10 @@ class Dashboard extends Component
 
         // Avoid division by zero
         $monthly_recurring_revenue = $currentMonth > 0 ? $totalMRR / $currentMonth : 0;
-        $daysPassed = max(Carbon::now()->month, 1);
-        $dash_table = Product::with('category')
+        $entries = Product::with('category')
             ->leftJoin('order_product', 'products.id', '=', 'order_product.product_id')
             ->leftJoin('orders', 'order_product.order_id', '=', 'orders.id')
+            ->where('orders.status', 'completed')
             ->whereBetween('orders.created_at', [
                 Carbon::now()->startOfMonth(),
                 Carbon::now()->endOfMonth(),
@@ -46,21 +46,11 @@ class Dashboard extends Component
             ->groupBy('products.id')
             ->paginate(5);
 
-        $headers = [
-            ['key' => 'product', 'label' => 'Product'],
-            ['key' => 'category.name', 'label' => 'Category'],
-            ['key' => 'stock', 'label' => 'Stock'],
-            ['key' => 'sales', 'label' => 'Sales'],
-            ['key' => 'revenue', 'label' => 'Revenue'],
-            ['key' => 'updated_at', 'label' => 'Last Update'],
-        ];
-
         return view('livewire.home', [
             'revenue' => $revenue,
             'total_order' => $total_order,
             'monthly_recurring_revenue' => $monthly_recurring_revenue,
-            'headers' => $headers,
-            'dash_table' => $dash_table,
+            'entries' => $entries,
         ]);
     }
 }

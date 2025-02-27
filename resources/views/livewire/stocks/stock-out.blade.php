@@ -1,6 +1,6 @@
 <div>
     <x-header title="Stock out" />
-    <x-card shadow>
+    <x-card shadow class="overflow-x-auto">
         <x-form wire:submit="save" no-separator>
             <x-select label="Product" :options="$products" placeholder="Select a product" placeholder-value="0"
                 wire:model="product_id" />

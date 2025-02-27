@@ -18,29 +18,52 @@
             </div>
         </x-card>
     </div>
-    <x-card shadow>
-        <x-table :headers='$headers' :rows="$dash_table" with-pagination>
-            @scope('cell_product', $entry)
-                <div class="flex items-center px-4 py-2 font-medium whitespace-nowrap">
-                    @if ($entry->image)
-                        <img src="{{ asset('local-storage/' . $entry->image) }}" alt="{{ $entry->name }}'s Image"
-                            class="w-8 h-8 mr-3 rounded object-cover">
-                    @else
-                        <img src="{{ asset('No_Image_Available.jpg') }}" alt="Image not available"
-                            class="w-8 h-8 mr-3 rounded">
-                    @endif
-                    {{ $entry->name }}
-                </div>
-            @endscope
-            @scope('cell_sales', $entry)
-                {{ $entry->total_sales ?? 0 }}
-            @endscope
-            @scope('cell_revenue', $entry)
-                {{ '$' . number_format($entry->monthly_revenue, 2) }}
-            @endscope
-            @scope('cell_updated_at', $entry)
-                {{ $entry->updated_at->diffForHumans() }}
-            @endscope
-        </x-table>
+    <x-card shadow class="overflow-x-auto">
+        <table class="table table-zebra">
+            <thead>
+                <tr>
+                    <td>Product</td>
+                    <td>Category</td>
+                    <td>Stock</td>
+                    <td>Sales</td>
+                    <td>Revenue</td>
+                    <td>Last Update</td>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach ($entries as $entry)
+                    <tr>
+                        <td class="flex items-center px-4 py-2 font-medium whitespace-nowrap">
+                            @if ($entry->image)
+                                <img src="{{ asset('local-storage/' . $entry->image) }}"
+                                    alt="{{ $entry->name }}'s Image" class="w-8 h-8 mr-3 rounded object-cover">
+                            @else
+                                <img src="{{ asset('No_Image_Available.jpg') }}" alt="Image not available"
+                                    class="w-8 h-8 mr-3 rounded">
+                            @endif
+                            {{ $entry->name }}
+                        </td>
+                        <td>
+                            {{ $entry->category->name }}
+                        </td>
+                        <td>
+                            {{ $entry->stock }}
+                        </td>
+                        <td>
+                            {{ $entry->total_sales ?? 0 }}
+                        </td>
+                        <td>
+                            {{ '$' . number_format($entry->monthly_revenue, 2) }}
+                        </td>
+                        <td>
+                            {{ $entry->updated_at->diffForHumans() }}
+                        </td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+        <div class="my-2">
+            {{ $entries->links() }}
+        </div>
     </x-card>
 </div>

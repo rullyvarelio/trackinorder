@@ -1,6 +1,6 @@
 <div>
     <x-header title="Create Order" />
-    <x-card shadow>
+    <x-card shadow class="overflow-x-auto">
         <x-form wire:submit="save" no-separator>
             <table class="table table-zebra">
                 <thead>

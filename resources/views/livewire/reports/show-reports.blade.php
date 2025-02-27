@@ -4,7 +4,7 @@
             <x-input icon="o-magnifying-glass" placeholder="Search..." />
         </x-slot:middle>
     </x-header>
-    <x-card shadow>
+    <x-card shadow class="overflow-x-auto">
         <table class="table table-zebra">
             <thead>
                 <tr>

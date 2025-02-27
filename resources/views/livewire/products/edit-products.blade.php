@@ -3,7 +3,7 @@
 @endphp
 <div>
     <x-header title="Edit Product" />
-    <x-card shadow>
+    <x-card shadow class="overflow-x-auto">
         <x-form wire:submit="update" no-separator>
             <x-input label="Name" wire:model="name" />
             <x-select label="Category" :options="$categories" placeholder="Select a category" placeholder-value="0"
