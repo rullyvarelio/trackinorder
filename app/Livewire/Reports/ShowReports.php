@@ -10,6 +10,8 @@ class ShowReports extends Component
 {
     use Toast;
 
+    public $searchReports = '';
+
     public function report($format)
     {
         if ($format === 'csv') {
@@ -31,7 +33,10 @@ class ShowReports extends Component
 
     public function render()
     {
-        $orders = Order::where('status', '!=', 'pending')->where('status', '!=', 'canceled')->paginate(10);
+        $orders = Order::search($this->searchReports)
+            ->where('status', '!=', 'pending')
+            ->where('status', '!=', 'canceled')
+            ->paginate(10);
 
         return view('livewire.reports.show-reports', [
             'orders' => $orders,

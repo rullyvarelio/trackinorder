@@ -25,7 +25,7 @@ class StockInSeeder extends Seeder
             ]);
 
             // Update product stock
-            $product->update(['stock' => $stockIn->quantity, 'status' => true]);
+            $product->update(['stock' => $stockIn->quantity, 'status' => 'available']);
         });
     }
 }

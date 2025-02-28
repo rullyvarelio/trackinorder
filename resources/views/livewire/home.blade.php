@@ -1,10 +1,15 @@
 <div>
 
     <x-header title="Overview" />
-    <div class="grid gap-7 sm:grid-cols-2 lg:grid-cols-3 mb-10">
-        <x-card title="Revenue" subtitle="This month" shadow>
+    <div class="grid gap-7 sm:grid-cols-2 lg:grid-cols-4 mb-10">
+        <x-card title="Revenue" subtitle="This year" shadow>
             <div class="text-2xl font-bold ">
                 {{ '$' . number_format($revenue, 2) }}
+            </div>
+        </x-card>
+        <x-card title="ARPO" subtitle="Average Revenue per Order" shadow>
+            <div class="text-2xl font-bold ">
+                {{ '$' . number_format($arpo, 2) }}
             </div>
         </x-card>
         <x-card title="Orders" subtitle="This month" shadow>
@@ -12,9 +17,9 @@
                 {{ $total_order }}
             </div>
         </x-card>
-        <x-card title="MRR" subtitle="This year" shadow>
+        <x-card title="Growth rate" subtitle="This month" shadow>
             <div class="text-2xl font-bold ">
-                {{ '$' . number_format($monthly_recurring_revenue, 2) }}
+                {{ number_format($growth_rate, 2) }}%
             </div>
         </x-card>
     </div>

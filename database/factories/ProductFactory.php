@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Category;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -22,9 +23,11 @@ class ProductFactory extends Factory
             'category_id' => Category::factory(),
             'slug' => fake()->slug(),
             'price' => fake()->randomFloat(2, 10, 500),
-            'stock' => 0, // default
-            'status' => false,
+            'stock' => random_int(20, 200), // default
+            'status' => 'available',
             'image' => null,
+            'created_at' => Carbon::create(2020, 1, 1)->timestamp,
+            'updated_at' => Carbon::create(2020, 1, 1)->timestamp,
         ];
     }
 }

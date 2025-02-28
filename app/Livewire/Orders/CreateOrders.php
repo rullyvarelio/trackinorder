@@ -37,7 +37,7 @@ class CreateOrders extends Component
         }
 
         $totalPrice = 0;
-        $tokenOrder = uniqid('ORD'.Str::random(12), true);
+        $tokenOrder = uniqid('ORD'.Str::random(7), false);
         $stockOutEntries = [];
         $stockEntries = [];
 
@@ -95,7 +95,7 @@ class CreateOrders extends Component
             $draft_order->decrement('stock', $quantity);
 
             if ($draft_order->stock <= 0) {
-                $draft_order->update(['status' => 0]);
+                $draft_order->update(['status' => 'out of stock']);
             }
         }
 

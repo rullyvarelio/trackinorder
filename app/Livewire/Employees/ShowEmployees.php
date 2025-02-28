@@ -13,6 +13,8 @@ class ShowEmployees extends Component
 {
     use Toast, WithPagination;
 
+    public $searchEmployees = '';
+
     public function delete($id)
     {
         $user = User::find($id);
@@ -47,7 +49,10 @@ class ShowEmployees extends Component
 
     public function render()
     {
-        $users = User::where('id', '!=', Auth::id())->paginate(10);
+        $users = User::search($this->searchEmployees)
+            ->where('id', '!=', Auth::id())
+            ->orderBy('is_admin')
+            ->paginate(10);
 
         return view('livewire.employees.show-employees', [
             'users' => $users,

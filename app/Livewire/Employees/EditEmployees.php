@@ -83,8 +83,8 @@ class EditEmployees extends Component
     public function render()
     {
         $isAdmin = [
-            ['id' => 0, 'name' => 'Staff'],
-            ['id' => 1, 'name' => 'Admin'],
+            ['id' => 'staff', 'name' => 'Staff'],
+            ['id' => 'admin', 'name' => 'Admin'],
         ];
 
         return view('livewire.employees.edit-employees', [

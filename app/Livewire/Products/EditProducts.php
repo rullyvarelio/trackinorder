@@ -22,7 +22,7 @@ class EditProducts extends Component
 
     public $stock;
 
-    public bool $status;
+    public $status;
 
     public $image;
 
@@ -50,9 +50,9 @@ class EditProducts extends Component
     {
 
         if ($this->stock > 0) {
-            $this->status = true;
+            $this->status = 'available';
         } else {
-            $this->status = false;
+            $this->status = 'out of stock';
         }
 
         $validated = $this->validate([

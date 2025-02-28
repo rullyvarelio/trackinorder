@@ -1,7 +1,9 @@
 <div>
     <x-header title="Employees">
         <x-slot:middle class="!justify-end">
-            <x-input icon="o-magnifying-glass" placeholder="Search..." />
+            <form method="GET">
+                <x-input icon="o-magnifying-glass" placeholder="Search..." wire:model.live="searchEmployees" />
+            </form>
         </x-slot:middle>
         <x-slot:actions>
             <x-button link="{{ route('employees.create') }}" icon="o-plus" class="btn-primary" />
@@ -41,7 +43,7 @@
                             </div>
                         </td>
                         <td>
-                            @if ($user->is_admin)
+                            @if ($user->is_admin == 'admin')
                                 <x-badge value="Admin" class="badge-primary" />
                             @else
                                 <x-badge value="Staff" class="badge-secondary" />

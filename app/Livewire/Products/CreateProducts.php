@@ -29,7 +29,7 @@ class CreateProducts extends Component
     public $stock;
 
     #[Validate('required')]
-    public bool $status;
+    public $status;
 
     #[Validate('image|file|nullable')]
     public $image;
@@ -37,7 +37,7 @@ class CreateProducts extends Component
     public function mount()
     {
         $this->stock = 0;
-        $this->status = false;
+        $this->status = 'out of stock';
     }
 
     public function save()

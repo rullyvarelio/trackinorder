@@ -12,6 +12,8 @@ class ShowProducts extends Component
 {
     use Toast, WithPagination;
 
+    public $searchProducts = '';
+
     public function delete($id)
     {
         $product = Product::find($id);
@@ -37,7 +39,8 @@ class ShowProducts extends Component
 
     public function render()
     {
-        $products = Product::with('category')->paginate(10);
+        $products = Product::search($this->searchProducts)
+            ->paginate(10);
 
         return view('livewire.products.show-products', [
             'products' => $products,

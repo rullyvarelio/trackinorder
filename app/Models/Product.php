@@ -2,10 +2,11 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Cviebrock\EloquentSluggable\Sluggable;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Product extends Model
 {
@@ -20,6 +21,8 @@ class Product extends Model
         'image',
     ];
 
+    protected $with = ['category'];
+
     /**
      * Get the category that owns the product.
      */
@@ -33,7 +36,6 @@ class Product extends Model
         return $this->hasOne(Stock::class);
     }
 
-
     /**
      * Return the sluggable configuration array for this model.
      */
@@ -45,5 +47,18 @@ class Product extends Model
                 'onUpdate' => true,
             ],
         ];
+    }
+
+    public function scopeSearch(Builder $query, $searchTerm)
+    {
+        $searchTerm = trim($searchTerm); // Remove extra spaces
+
+        return $query->when($searchTerm !== '', function (Builder $query) use ($searchTerm) {
+            $query->where('name', 'like', '%'.$searchTerm.'%')
+                ->orWhereHas('category', function (Builder $categoryQuery) use ($searchTerm) {
+                    $categoryQuery->where('name', 'like', '%'.$searchTerm.'%');
+                })
+                ->orWhere('status', 'like', '%'.$searchTerm.'%');
+        });
     }
 }

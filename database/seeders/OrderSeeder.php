@@ -3,9 +3,14 @@
 namespace Database\Seeders;
 
 use App\Models\Order;
+use App\Models\OrderProduct;
+use App\Models\Product;
+use App\Models\StockOut;
 use App\Models\Transaction;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Str;
 
 class OrderSeeder extends Seeder
 {
@@ -14,9 +19,86 @@ class OrderSeeder extends Seeder
      */
     public function run(): void
     {
-        Order::factory(20)->recycle(
-            User::all(),
-            Transaction::all(),
-        )->create();
+        $users = User::all();
+        $products = Product::where('status', 'available')->where('stock', '>=', 3)->get();
+
+        foreach ($users as $user) {
+            $createdAt = Carbon::createFromTimestamp(mt_rand(
+                Carbon::create(2025, 1, 1)->timestamp,
+                Carbon::now()->timestamp
+            ));
+
+            $order = Order::create([
+                'user_id' => $user->id,
+                'total_price' => 0,
+                'status' => 'pending',
+                'token_order' => uniqid('ORD'.Str::random(7), false),
+                'created_at' => $createdAt,
+                'updated_at' => $createdAt,
+            ]);
+
+            $totalPrice = 0;
+
+            $selectedProducts = $products->random(rand(1, 3)); // Random 1-3 products per order
+            foreach ($selectedProducts as $product) {
+
+                $quantity = rand(1, 5);
+                if ($product->stock < $quantity) {
+                    continue; // Skip if not enough stock
+                }
+
+                $subtotal = $product->price * $quantity;
+                $totalPrice += $subtotal;
+
+                OrderProduct::create([
+                    'order_id' => $order->id,
+                    'product_id' => $product->id,
+                    'quantity' => $quantity,
+                    'subtotal' => $subtotal,
+                    'created_at' => $createdAt,
+                    'updated_at' => $createdAt,
+                ]);
+
+                // Decrease product stock
+                $product->decrement('stock', $quantity);
+
+                // Create stock out entry
+                StockOut::create([
+                    'product_id' => $product->id,
+                    'quantity' => $quantity,
+                    'reason' => 'Sold',
+                    'used_date' => now(),
+                    'token_order' => $order->token_order,
+                    'created_at' => $createdAt,
+                    'updated_at' => $createdAt,
+
+                ]);
+
+                $product->stock()->create([
+                    'product_id' => $product->id,
+                    'quantity' => $quantity,
+                    'type' => 'out',
+                ]);
+
+                // Update product status if stock is zero
+                if ($product->stock === 0) {
+                    $product->update(['status' => 'out of stock']);
+                }
+            }
+
+            $order->update(['total_price' => $totalPrice]);
+
+            Transaction::create([
+                'order_id' => $order->id,
+                'token_order' => $order->token_order,
+                'total_price' => $totalPrice,
+                'paid' => $totalPrice, // Assume full payment
+                'changes' => 0,
+                'created_at' => $createdAt,
+                'updated_at' => $createdAt,
+            ]);
+
+            $order->update(['status' => 'paid']);
+        }
     }
 }

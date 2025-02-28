@@ -1,7 +1,10 @@
 <div>
     <x-header title="Orders">
         <x-slot:middle class="!justify-end">
-            <x-input icon="o-magnifying-glass" placeholder="Search..." />
+            <form method="GET">
+
+                <x-input icon="o-magnifying-glass" placeholder="Search..." wire:model.live="searchOrders" />
+            </form>
         </x-slot:middle>
         <x-slot:actions>
             <x-button link="{{ route('orders.create') }}" icon="o-plus" class="btn-primary" />

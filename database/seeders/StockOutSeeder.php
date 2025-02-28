@@ -19,11 +19,9 @@ class StockOutSeeder extends Seeder
         $products->each(function ($product) {
             $stockOut = StockOut::factory()->make(['product_id' => $product->id]);
 
-            // Ensure stock-out quantity does not exceed available stock
             $availableStock = $product->stock;
             $stockOutQuantity = min($stockOut->quantity, $availableStock);
 
-            // Create stock-out entry with adjusted quantity
             $stockOut = StockOut::factory()->create([
                 'product_id' => $product->id,
                 'quantity' => $stockOutQuantity,
@@ -32,6 +30,9 @@ class StockOutSeeder extends Seeder
             // Decrease product and stock table
             $newStock = max(0, $availableStock - $stockOutQuantity);
             $product->update(['stock' => $newStock]);
+            if ($product->stock == 0) {
+                $product->update(['status' => 'out of stock']);
+            }
             $product->stock()->create([
                 'product_id' => $product->id,
                 'quantity' => $stockOutQuantity,

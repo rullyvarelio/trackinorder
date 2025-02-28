@@ -1,7 +1,9 @@
 <div>
     <x-header title="Products">
         <x-slot:middle class="!justify-end">
-            <x-input icon="o-magnifying-glass" placeholder="Search..." />
+            <form method="get">
+                <x-input icon="o-magnifying-glass" placeholder="Search..." wire:model.live="searchProducts" />
+            </form>
         </x-slot:middle>
         <x-slot:actions>
             <x-button link="{{ route('products.create') }}" icon="o-plus" class="btn-primary" />
@@ -30,7 +32,7 @@
                         <td>{{ '$' . $product->price }}</td>
                         <td>{{ $product->stock }}</td>
                         <td>
-                            @if ($product->status)
+                            @if ($product->status == 'available')
                                 <x-badge value="Available" class="badge-success" />
                             @else
                                 <x-badge value="Out of stock" class="badge-error" />

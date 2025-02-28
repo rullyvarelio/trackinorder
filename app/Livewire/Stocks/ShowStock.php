@@ -12,7 +12,8 @@ class ShowStock extends Component
 
     public function render()
     {
-        $stocks = Stock::orderBy('created_at', 'desc')->with('product')->paginate(10);
+        $stocks = Stock::orderBy('created_at', 'desc')
+            ->paginate(10);
 
         return view('livewire.stocks.show-stock', [
             'stocks' => $stocks,

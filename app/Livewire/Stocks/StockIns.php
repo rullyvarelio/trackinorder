@@ -54,7 +54,7 @@ class StockIns extends Component
         $product->increment('stock', $stock->quantity);
 
         if ($stock->quantity) {
-            Product::where('id', $this->product_id)->update(['status' => 1]);
+            Product::where('id', $this->product_id)->update(['status' => 'available']);
         }
 
         $this->success(

@@ -14,6 +14,8 @@ class ShowOrders extends Component
 {
     use Toast;
 
+    public $searchOrders = '';
+
     public function cancel($id)
     {
         $order = Order::find($id);
@@ -66,7 +68,9 @@ class ShowOrders extends Component
 
     public function render()
     {
-        $orders = Order::with('user')->paginate(10);
+        $orders = Order::search($this->searchOrders)
+            ->orderBy('created_at', 'desc')
+            ->paginate(10);
 
         return view('livewire.orders.show-orders', [
             'orders' => $orders,

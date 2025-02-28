@@ -5,9 +5,9 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
 use Cviebrock\EloquentSluggable\Sluggable;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -65,5 +65,16 @@ class User extends Authenticatable
                 'onUpdate' => true,
             ],
         ];
+    }
+
+    public function scopeSearch(Builder $query, $searchTerm)
+    {
+        $searchTerm = trim($searchTerm); // Remove extra spaces
+
+        return $query->when($searchTerm !== '', function (Builder $query) use ($searchTerm) {
+            $query->where('name', 'like', '%'.$searchTerm.'%')
+                ->orWhere('email', 'like', '%'.$searchTerm.'%')
+                ->orWhere('is_admin', 'like', '%'.$searchTerm.'%');
+        });
     }
 }

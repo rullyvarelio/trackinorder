@@ -51,7 +51,7 @@ class StockOuts extends Component
             StockOut::create($validated);
             $product->decrement('stock', $this->quantity);
             if ($product->stock <= 0) {
-                $product->update(['status' => 0]);
+                $product->update(['status' => 'out of stock']);
             }
 
             Stock::create([
@@ -74,7 +74,7 @@ class StockOuts extends Component
 
     public function render()
     {
-        $products = Product::all()->where('status', true);
+        $products = Product::all()->where('status', 'available');
         $reasons = [
             ['id' => 1, 'name' => 'Expired'],
             ['id' => 2, 'name' => 'Damaged'],

@@ -13,9 +13,9 @@ class Dashboard extends Component
 {
     public function render()
     {
-        $revenue = Transaction::whereBetween('created_at', [
-            Carbon::now()->startOfMonth(),
-            Carbon::now()->endOfMonth(),
+        $revenue_year = Transaction::whereBetween('created_at', [
+            Carbon::now()->startOfYear(),
+            Carbon::now()->endOfYear(),
         ])->sum('total_price');
 
         $total_order = Order::where('status', 'paid')
@@ -25,13 +25,27 @@ class Dashboard extends Component
             ])
             ->count();
 
-        $totalMRR = Transaction::whereYear('created_at', Carbon::now()->year)->sum('total_price');
-        $currentMonth = Carbon::now()->month;
+        $revenue_thismonth = Transaction::whereBetween('created_at', [
+            Carbon::now()->startOfMonth(),
+            Carbon::now()->endOfMonth(),
+        ])->sum('total_price');
 
-        // Avoid division by zero
-        $monthly_recurring_revenue = $currentMonth > 0 ? $totalMRR / $currentMonth : 0;
-        $entries = Product::with('category')
-            ->leftJoin('order_product', 'products.id', '=', 'order_product.product_id')
+        $revenue_lastmonth = Transaction::whereBetween('created_at', [
+            Carbon::now()->subMonth()->startOfMonth(),
+            Carbon::now()->subMonth()->endOfMonth(),
+        ])->sum('total_price');
+
+        if ($revenue_lastmonth > 0) {
+            $growth_rate = (($revenue_thismonth - $revenue_lastmonth) / $revenue_lastmonth) * 100;
+        } else {
+            $growth_rate = 0;
+        }
+
+        $total_rev = Transaction::sum('total_price');
+        $total_ord = Order::where('status', 'paid')->count();
+        $arpo = $total_rev / $total_ord ?? 0;
+
+        $entries = Product::leftJoin('order_product', 'products.id', '=', 'order_product.product_id')
             ->leftJoin('orders', 'order_product.order_id', '=', 'orders.id')
             ->where('orders.status', 'paid')
             ->whereBetween('orders.created_at', [
@@ -44,12 +58,13 @@ class Dashboard extends Component
                 DB::raw('COALESCE(SUM(order_product.subtotal), 0) as monthly_revenue')
             )
             ->groupBy('products.id')
-            ->paginate(5);
+            ->paginate(10);
 
         return view('livewire.home', [
-            'revenue' => $revenue,
+            'revenue' => $revenue_year,
             'total_order' => $total_order,
-            'monthly_recurring_revenue' => $monthly_recurring_revenue,
+            'growth_rate' => $growth_rate,
+            'arpo' => $arpo,
             'entries' => $entries,
         ]);
     }

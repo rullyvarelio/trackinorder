@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('slug')->unique();
             $table->decimal('price', 10, 2)->unsigned();
             $table->integer('stock')->unsigned();
-            $table->boolean('status');
+            $table->enum('status', ['available', 'out of stock']);
             $table->string('image')->nullable();
             $table->timestamps();
         });

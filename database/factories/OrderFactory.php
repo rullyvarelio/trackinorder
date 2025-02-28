@@ -23,7 +23,7 @@ class OrderFactory extends Factory
             'user_id' => User::factory(),
             'total_price' => OrderProduct::factory(),
             'status' => fake()->randomElement(['pending', 'paid', 'completed']),
-            'token_order' => Str::random(10),
+            'token_order' => uniqid('ORD'.Str::random(7), false),
         ];
     }
 }
