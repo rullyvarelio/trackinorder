@@ -49,13 +49,9 @@ class ShowEmployees extends Component
 
     public function render()
     {
-        $users = User::search($this->searchEmployees)
-            ->where('id', '!=', Auth::id())
-            ->orderBy('is_admin')
-            ->paginate(10);
 
         return view('livewire.employees.show-employees', [
-            'users' => $users,
+            'users' => User::search($this->searchEmployees)->where('id', '!=', Auth::id())->orderBy('is_admin')->paginate(10),
         ]);
     }
 }

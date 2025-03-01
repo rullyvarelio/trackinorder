@@ -28,7 +28,7 @@
 
 <body>
 
-    <h2>📊 Orders Report</h2>
+    <h2>Orders Report</h2>
 
     <table>
         <thead>

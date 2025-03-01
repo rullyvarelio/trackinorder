@@ -24,7 +24,7 @@ class OrderSeeder extends Seeder
 
         foreach ($users as $user) {
             $createdAt = Carbon::createFromTimestamp(mt_rand(
-                Carbon::create(2025, 1, 1)->timestamp,
+                Carbon::create(2025, 2, 25)->timestamp,
                 Carbon::now()->timestamp
             ));
 
@@ -39,12 +39,12 @@ class OrderSeeder extends Seeder
 
             $totalPrice = 0;
 
-            $selectedProducts = $products->random(rand(1, 3)); // Random 1-3 products per order
+            $selectedProducts = $products->random(rand(1, 3));
             foreach ($selectedProducts as $product) {
 
                 $quantity = rand(1, 5);
                 if ($product->stock < $quantity) {
-                    continue; // Skip if not enough stock
+                    continue;
                 }
 
                 $subtotal = $product->price * $quantity;
@@ -59,10 +59,8 @@ class OrderSeeder extends Seeder
                     'updated_at' => $createdAt,
                 ]);
 
-                // Decrease product stock
                 $product->decrement('stock', $quantity);
 
-                // Create stock out entry
                 StockOut::create([
                     'product_id' => $product->id,
                     'quantity' => $quantity,
@@ -78,9 +76,10 @@ class OrderSeeder extends Seeder
                     'product_id' => $product->id,
                     'quantity' => $quantity,
                     'type' => 'out',
+                    'created_at' => $createdAt,
+                    'updated_at' => $createdAt,
                 ]);
 
-                // Update product status if stock is zero
                 if ($product->stock === 0) {
                     $product->update(['status' => 'out of stock']);
                 }
@@ -92,7 +91,7 @@ class OrderSeeder extends Seeder
                 'order_id' => $order->id,
                 'token_order' => $order->token_order,
                 'total_price' => $totalPrice,
-                'paid' => $totalPrice, // Assume full payment
+                'paid' => $totalPrice,
                 'changes' => 0,
                 'created_at' => $createdAt,
                 'updated_at' => $createdAt,

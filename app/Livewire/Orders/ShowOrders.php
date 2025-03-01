@@ -45,11 +45,9 @@ class ShowOrders extends Component
             $stockOut->delete();
         }
 
-        // Delete the transaction linked to this order
         OrderProduct::where('order_id', $id)->delete();
         Transaction::where('order_id', $id)->delete();
 
-        // Update order status and token in one go
         $order->update([
             'token_order' => null,
             'status' => 'canceled',
@@ -68,12 +66,9 @@ class ShowOrders extends Component
 
     public function render()
     {
-        $orders = Order::search($this->searchOrders)
-            ->orderBy('created_at', 'desc')
-            ->paginate(10);
 
         return view('livewire.orders.show-orders', [
-            'orders' => $orders,
+            'orders' => Order::search($this->searchOrders)->latest()->paginate(10),
         ]);
     }
 }

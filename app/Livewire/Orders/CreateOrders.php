@@ -43,7 +43,7 @@ class CreateOrders extends Component
 
         $order = Order::create([
             'user_id' => Auth::id(),
-            'total_price' => $totalPrice, // Will be updated later
+            'total_price' => $totalPrice,
             'status' => 'pending',
             'token_order' => $tokenOrder,
         ]);

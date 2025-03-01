@@ -18,9 +18,9 @@ return new class extends Migration
                 indexName: 'stock_out_product_id'
             )->onDelete('cascade');
             $table->integer('quantity')->unsigned();
-            $table->string('reason'); // Sold, Expired, Damaged, etc.
+            $table->string('reason');
             $table->date('used_date');
-            $table->string('token_order')->nullable(); // Sold, Expired, Damaged, etc.
+            $table->string('token_order')->nullable();
             $table->timestamps();
         });
     }

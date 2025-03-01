@@ -23,7 +23,7 @@ class ProductFactory extends Factory
             'category_id' => Category::factory(),
             'slug' => fake()->slug(),
             'price' => fake()->randomFloat(2, 10, 500),
-            'stock' => random_int(20, 200), // default
+            'stock' => random_int(20, 200),
             'status' => 'available',
             'image' => null,
             'created_at' => Carbon::create(2020, 1, 1)->timestamp,

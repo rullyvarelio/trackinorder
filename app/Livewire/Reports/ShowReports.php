@@ -33,13 +33,9 @@ class ShowReports extends Component
 
     public function render()
     {
-        $orders = Order::search($this->searchReports)
-            ->where('status', '!=', 'pending')
-            ->where('status', '!=', 'canceled')
-            ->paginate(10);
 
         return view('livewire.reports.show-reports', [
-            'orders' => $orders,
+            'orders' => Order::search($this->searchReports)->whereIn('status', ['paid', 'completed'])->paginate(10),
         ]);
     }
 }

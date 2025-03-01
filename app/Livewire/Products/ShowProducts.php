@@ -39,11 +39,9 @@ class ShowProducts extends Component
 
     public function render()
     {
-        $products = Product::search($this->searchProducts)
-            ->paginate(10);
 
         return view('livewire.products.show-products', [
-            'products' => $products,
+            'products' => Product::search($this->searchProducts)->paginate(10),
         ]);
     }
 }

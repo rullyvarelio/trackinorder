@@ -29,7 +29,6 @@
     </x-main>
     <x-theme-toggle class="fixed right-2 bottom-3" darkTheme="business" lightTheme="corporate" />
     <x-toast />
-    {{-- <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script> --}}
 </body>
 
 </html>

@@ -9,7 +9,7 @@
         </x-card>
         <x-card title="ARPO" subtitle="Average Revenue per Order" shadow>
             <div class="text-2xl font-bold ">
-                {{ '$' . number_format($arpo, 2) }}
+                {{ '$' . $arpo }}
             </div>
         </x-card>
         <x-card title="Orders" subtitle="This month" shadow>

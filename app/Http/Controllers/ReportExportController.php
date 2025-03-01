@@ -31,16 +31,16 @@ class ReportExportController extends Controller
         $filename = 'orders_report_'.date('Y-m-d').'.csv';
         $handle = fopen('php://temp', 'w+');
 
-        // Header row
-        fputcsv($handle, ['Token Order', 'Total Price', 'Status', 'Date']);
+        fwrite($handle, "\xEF\xBB\xBF");
 
-        // Data rows
+        fputcsv($handle, ['Token Order', 'Total Price', 'Status', 'Date'], ',');
+
         foreach ($orders as $order) {
             fputcsv($handle, [
                 $order->token_order,
-                $order->total_price,
+                number_format($order->total_price, 2, '.', ''),
                 ucfirst($order->status),
-                $order->created_at->format('Y-m-d'),
+                $order->created_at->format('Y-m-d H:i:s'),
             ]);
         }
 
@@ -49,7 +49,7 @@ class ReportExportController extends Controller
         fclose($handle);
 
         return Response::make($csvContent, 200, [
-            'Content-Type' => 'text/csv',
+            'Content-Type' => 'text/csv; charset=UTF-8',
             'Content-Disposition' => "attachment; filename={$filename}",
         ]);
     }
