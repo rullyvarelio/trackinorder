@@ -2,6 +2,9 @@
 
 use App\Http\Controllers\LogoutController;
 use App\Http\Controllers\ReportExportController;
+use App\Livewire\Admin\Categories\CreateCategories;
+use App\Livewire\Admin\Categories\EditCategories;
+use App\Livewire\Admin\Categories\ShowCategories;
 use App\Livewire\Dashboard;
 use App\Livewire\Employees\CreateEmployees;
 use App\Livewire\Employees\EditEmployees;
@@ -19,31 +22,56 @@ use App\Livewire\Stocks\StockIns;
 use App\Livewire\Stocks\StockOuts;
 use Illuminate\Support\Facades\Route;
 
+// Authentication Routes
 Route::get('/', Login::class)->name('login')->middleware('guest');
-
-Route::get('dashboard', function () {
-    return redirect()->route('dashboard');
-})->middleware('auth');
-
-Route::get('dashboard/overview', Dashboard::class)->name('dashboard')->middleware('auth');
-
-Route::get('dashboard/products', ShowProducts::class)->name('products.index')->middleware('auth');
-Route::get('dashboard/products/create', CreateProducts::class)->name('products.create')->middleware('auth');
-Route::get('dashboard/products/{slug}/edit', EditProducts::class)->name('products.edit')->middleware('auth');
-
-Route::get('dashboard/stocks', ShowStock::class)->name('stocks.index')->middleware('auth');
-Route::get('dashboard/stock/stock-in', StockIns::class)->name('stocks.in')->middleware('auth');
-Route::get('dashboard/stock/stock-out', StockOuts::class)->name('stocks.out')->middleware('auth');
-
-Route::get('dashboard/employees', ShowEmployees::class)->name('employees.index')->middleware('auth');
-Route::get('dashboard/employees/create', CreateEmployees::class)->name('employees.create')->middleware('auth');
-Route::get('dashboard/employees/{slug}/edit', EditEmployees::class)->name('employees.edit')->middleware('auth');
-
-Route::get('dashboard/orders', ShowOrders::class)->name('orders.index')->middleware('auth');
-Route::get('dashboard/orders/create', CreateOrders::class)->name('orders.create')->middleware('auth');
-Route::get('dashboard/orders/{token_order}/pay', PayOrders::class)->name('orders.pay')->middleware('auth');
-
-Route::get('dashboard/reports', ShowReports::class)->name('reports.index')->middleware('auth');
-Route::get('reports/export/{format}', [ReportExportController::class, 'export'])->name('reports.export');
-
 Route::post('logout', LogoutController::class)->name('logout')->middleware('auth');
+
+// Dashboard Route
+Route::middleware('auth')->group(function () {
+    Route::get('dashboard', fn () => redirect()->route('dashboard'));
+    Route::get('dashboard/overview', Dashboard::class)->name('dashboard');
+
+    // Products Management
+    Route::prefix('dashboard/products')->name('products.')->group(function () {
+        Route::get('/', ShowProducts::class)->name('index');
+        Route::get('create', CreateProducts::class)->name('create');
+        Route::get('{slug}/edit', EditProducts::class)->name('edit');
+    });
+
+    // Stock Management
+    Route::prefix('dashboard/stocks')->name('stocks.')->group(function () {
+        Route::get('/', ShowStock::class)->name('index');
+        Route::get('stock-in', StockIns::class)->name('in');
+        Route::get('stock-out', StockOuts::class)->name('out');
+    });
+
+    // Employees Management
+    Route::prefix('dashboard/employees')->name('employees.')->group(function () {
+        Route::get('/', ShowEmployees::class)->name('index');
+        Route::get('create', CreateEmployees::class)->name('create');
+        Route::get('{slug}/edit', EditEmployees::class)->name('edit');
+    });
+
+    // Orders Management
+    Route::prefix('dashboard/orders')->name('orders.')->group(function () {
+        Route::get('/', ShowOrders::class)->name('index');
+        Route::get('create', CreateOrders::class)->name('create');
+        Route::get('{token_order}/pay', PayOrders::class)->name('pay');
+    });
+
+    // Reports Management
+    Route::prefix('dashboard/reports')->name('reports.')->group(function () {
+        Route::get('/', ShowReports::class)->name('index');
+    });
+
+    // Report Export
+    Route::get('reports/export/{format}', [ReportExportController::class, 'export'])->name('reports.export');
+});
+
+Route::middleware('admin')->group(function () {
+    Route::prefix('dashboard/admin/categories')->name('categories.')->group(function () {
+        Route::get('/', ShowCategories::class)->name('index');
+        Route::get('create', CreateCategories::class)->name('create');
+        Route::get('{slug}/edit', EditCategories::class)->name('edit');
+    });
+});

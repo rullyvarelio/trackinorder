@@ -68,7 +68,7 @@ class ShowOrders extends Component
     {
 
         return view('livewire.orders.show-orders', [
-            'orders' => Order::search($this->searchOrders)->latest()->paginate(10),
+            'orders' => Order::with('user')->search($this->searchOrders)->latest()->paginate(10),
         ]);
     }
 }

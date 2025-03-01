@@ -43,7 +43,7 @@
                             </div>
                         </td>
                         <td>
-                            @if ($user->is_admin == 'admin')
+                            @if ($user->role == 'admin')
                                 <x-badge value="Admin" class="badge-primary" />
                             @else
                                 <x-badge value="Staff" class="badge-secondary" />

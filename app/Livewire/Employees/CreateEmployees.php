@@ -26,7 +26,7 @@ class CreateEmployees extends Component
     public $password_confirmation;
 
     #[Validate('required')]
-    public $is_admin;
+    public $role;
 
     #[Validate('required')]
     public $slug;
@@ -61,13 +61,13 @@ class CreateEmployees extends Component
 
     public function render()
     {
-        $isAdmin = [
+        $role_select = [
             ['id' => 'staff', 'name' => 'Staff'],
             ['id' => 'admin', 'name' => 'Admin'],
         ];
 
         return view('livewire.employees.create-employees', [
-            'isAdmin' => $isAdmin,
+            'role_select' => $role_select,
         ]);
     }
 }

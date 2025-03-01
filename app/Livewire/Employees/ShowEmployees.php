@@ -6,12 +6,11 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
-use Livewire\WithPagination;
 use Mary\Traits\Toast;
 
 class ShowEmployees extends Component
 {
-    use Toast, WithPagination;
+    use Toast;
 
     public $searchEmployees = '';
 
@@ -51,7 +50,7 @@ class ShowEmployees extends Component
     {
 
         return view('livewire.employees.show-employees', [
-            'users' => User::search($this->searchEmployees)->where('id', '!=', Auth::id())->orderBy('is_admin')->paginate(10),
+            'users' => User::search($this->searchEmployees)->where('id', '!=', Auth::id())->orderBy('role')->paginate(10),
         ]);
     }
 }

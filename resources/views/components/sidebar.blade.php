@@ -38,15 +38,20 @@
     @endif
 
     <x-menu activate-by-route>
-        <x-menu-item title="Home" icon="o-home" :link="route('dashboard')" wire:navigate />
-        <x-menu-item title="Products" icon="o-archive-box" :link="route('products.index')" wire:navigate />
-        <x-menu-item title="Orders" icon="o-clipboard-document-list" :link="route('orders.index')" wire:navigate />
+        <x-menu-item title="Home" icon="o-home" :link="route('dashboard')" />
+        <x-menu-item title="Products" icon="o-archive-box" :link="route('products.index')" />
+        <x-menu-item title="Orders" icon="o-clipboard-document-list" :link="route('orders.index')" />
         <x-menu-sub title="Stock management" icon="o-inbox-stack">
-            <x-menu-item title="Stocks" icon="o-square-2-stack" :link="route('stocks.index')" wire:navigate />
-            <x-menu-item title="Stock in" icon="o-arrow-down-on-square-stack" :link="route('stocks.in')" wire:navigate />
-            <x-menu-item title="Stock out" icon="o-arrow-up-on-square-stack" :link="route('stocks.out')" wire:navigate />
+            <x-menu-item title="Stocks" icon="o-square-2-stack" :link="route('stocks.index')" />
+            <x-menu-item title="Stock in" icon="o-arrow-down-on-square-stack" :link="route('stocks.in')" />
+            <x-menu-item title="Stock out" icon="o-arrow-up-on-square-stack" :link="route('stocks.out')" />
         </x-menu-sub>
-        <x-menu-item title="Employees" icon="o-user-group" :link="route('employees.index')" wire:navigate />
-        <x-menu-item title="Reports" icon="o-document-chart-bar" :link="route('reports.index')" wire:navigate />
+        <x-menu-item title="Employees" icon="o-user-group" :link="route('employees.index')" />
+        <x-menu-item title="Reports" icon="o-document-chart-bar" :link="route('reports.index')" />
+        {{-- only accesed by admin --}}
+        <x-menu-separator />
+        <x-menu-item title="Categories" icon="o-table-cells" :link="route('categories.index')" />
+
     </x-menu>
+
 </x-slot:sidebar>

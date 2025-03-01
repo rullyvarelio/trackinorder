@@ -5,12 +5,11 @@ namespace App\Livewire\Products;
 use App\Models\Product;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
-use Livewire\WithPagination;
 use Mary\Traits\Toast;
 
 class ShowProducts extends Component
 {
-    use Toast, WithPagination;
+    use Toast;
 
     public $searchProducts = '';
 
@@ -27,7 +26,7 @@ class ShowProducts extends Component
         }
 
         $this->success(
-            title: 'Produc successfully deleted!',
+            title: 'Product successfully deleted!',
             description: null,
             position: 'toast-top toast-end',
             icon: 'o-information-circle',
@@ -41,7 +40,7 @@ class ShowProducts extends Component
     {
 
         return view('livewire.products.show-products', [
-            'products' => Product::search($this->searchProducts)->paginate(10),
+            'products' => Product::with('category')->paginate(10),
         ]);
     }
 }

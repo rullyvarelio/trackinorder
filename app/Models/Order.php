@@ -10,8 +10,6 @@ class Order extends Model
 {
     protected $fillable = ['user_id', 'total_price', 'status', 'token_order'];
 
-    protected $with = ['user'];
-
     public function products()
     {
         return $this->belongsToMany(Product::class)->withPivot('quantity', 'subtotal');

@@ -9,8 +9,6 @@ class Stock extends Model
 {
     protected $fillable = ['product_id', 'quantity', 'type'];
 
-    protected $with = ['product'];
-
     public function product(): BelongsTo
     {
         return $this->belongsTo(Product::class);

@@ -22,7 +22,7 @@ class EditEmployees extends Component
 
     public $password_confirmation;
 
-    public $is_admin;
+    public $role;
 
     public $image;
 
@@ -40,7 +40,7 @@ class EditEmployees extends Component
 
         $this->name = $user->name;
         $this->email = $user->email;
-        $this->is_admin = $user->is_admin;
+        $this->role = $user->role;
         $this->oldImage = $user->image;
     }
 
@@ -50,7 +50,7 @@ class EditEmployees extends Component
             'name' => 'required',
             'email' => 'required|email:dns',
             'password' => 'required|confirmed',
-            'is_admin' => 'required',
+            'role' => 'required',
             'image' => 'nullable|image',
         ]);
 
@@ -82,13 +82,13 @@ class EditEmployees extends Component
 
     public function render()
     {
-        $isAdmin = [
+        $role_select = [
             ['id' => 'staff', 'name' => 'Staff'],
             ['id' => 'admin', 'name' => 'Admin'],
         ];
 
         return view('livewire.employees.edit-employees', [
-            'isAdmin' => $isAdmin,
+            'role_select' => $role_select,
 
         ]);
     }

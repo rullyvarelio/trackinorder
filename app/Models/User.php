@@ -25,7 +25,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'is_admin',
+        'role',
         'image',
     ];
 
@@ -74,7 +74,7 @@ class User extends Authenticatable
         return $query->when($searchTerm !== '', function (Builder $query) use ($searchTerm) {
             $query->where('name', 'like', '%'.$searchTerm.'%')
                 ->orWhere('email', 'like', '%'.$searchTerm.'%')
-                ->orWhere('is_admin', 'like', '%'.$searchTerm.'%');
+                ->orWhere('role', 'like', '%'.$searchTerm.'%');
         });
     }
 }
