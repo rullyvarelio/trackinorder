@@ -50,6 +50,9 @@ class Product extends Model
                 ->orWhereHas('category', function (Builder $categoryQuery) use ($searchTerm) {
                     $categoryQuery->where('name', 'like', '%'.$searchTerm.'%');
                 })
+                ->orWhereHas('category', function (Builder $categoryQuery) use ($searchTerm) {
+                    $categoryQuery->where('slug', 'like', '%'.$searchTerm.'%');
+                })
                 ->orWhere('status', 'like', '%'.$searchTerm.'%');
         });
     }

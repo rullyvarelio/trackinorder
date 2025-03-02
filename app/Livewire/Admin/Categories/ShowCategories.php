@@ -10,6 +10,8 @@ class ShowCategories extends Component
 {
     use Toast;
 
+    public $searchCategories = '';
+
     public function delete($id)
     {
         $category = Category::find($id);
@@ -30,7 +32,9 @@ class ShowCategories extends Component
     public function render()
     {
         return view('livewire.admin.categories.show-categories', [
-            'categories' => Category::with('products')->paginate(5),
+            'categories' => Category::with('products')
+                ->search($this->searchCategories)
+                ->paginate(5),
         ]);
     }
 }

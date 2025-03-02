@@ -5,9 +5,11 @@
                 <x-input icon="o-magnifying-glass" placeholder="Search..." wire:model.live="searchEmployees" />
             </form>
         </x-slot:middle>
-        <x-slot:actions>
-            <x-button link="{{ route('employees.create') }}" icon="o-plus" class="btn-primary" />
-        </x-slot:actions>
+        @can('admin')
+            <x-slot:actions>
+                <x-button link="{{ route('employees.create') }}" icon="o-plus" class="btn-primary" />
+            </x-slot:actions>
+        @endcan
     </x-header>
     <x-card shadow class="overflow-x-auto">
         <table class="table table-zebra">
@@ -17,7 +19,9 @@
                     <th>Employee</th>
                     <th>Role</th>
                     <th>Joined</th>
-                    <th>Action</th>
+                    @can('admin')
+                        <th>Action</th>
+                    @endcan
                 </tr>
             </thead>
             <tbody>
@@ -43,10 +47,10 @@
                             </div>
                         </td>
                         <td>
-                            @if ($user->role == 'admin')
-                                <x-badge value="Admin" class="badge-primary" />
+                            @if ($user->role_id == 1)
+                                <x-badge :value="$user->role->name" class="badge-primary" />
                             @else
-                                <x-badge value="Staff" class="badge-secondary" />
+                                <x-badge :value="$user->role->name" class="badge-secondary" />
                             @endif
                         </td>
                         <td>
@@ -54,11 +58,13 @@
                                 {{ $user->created_at->format('d-m-Y') }}
                             </span>
                         </td>
-                        <td>
-                            <x-button :link="route('employees.edit', $user->slug)" icon="o-pencil-square" class="btn-warning btn-sm" />
-                            <x-button icon="o-trash" class="btn-error btn-sm" wire:click="delete({{ $user->id }})"
-                                wire:confirm="Are you sure you want to delete this user?" />
-                        </td>
+                        @can('admin')
+                            <td>
+                                <x-button :link="route('employees.edit', $user->slug)" icon="o-pencil-square" class="btn-warning btn-sm" />
+                                <x-button icon="o-trash" class="btn-error btn-sm" wire:click="delete({{ $user->id }})"
+                                    wire:confirm="Are you sure you want to delete this user?" />
+                            </td>
+                        @endcan
                     </tr>
                 @endforeach
             </tbody>

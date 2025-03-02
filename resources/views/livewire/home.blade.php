@@ -1,5 +1,5 @@
 <div>
-
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <x-header title="Overview" />
     <div class="grid gap-7 sm:grid-cols-2 lg:grid-cols-4 mb-10">
         <x-card title="Revenue" subtitle="This year" shadow>
@@ -71,4 +71,13 @@
             {{ $entries->links() }}
         </div>
     </x-card>
+
+    <div class="grid gap-7 sm:grid-cols-2 lg:grid-cols-3 mt-10">
+        <x-card title="32.4k" subtitle="Orders this year" shadow>
+            <x-chart wire:model="chart1" />
+        </x-card>
+        <x-card title="$5,405" subtitle="Revenue this year" shadow class="col-span-2">
+            <x-chart wire:model="chart2" />
+        </x-card>
+    </div>
 </div>

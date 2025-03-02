@@ -2,8 +2,10 @@
 
 namespace App\Livewire\Employees;
 
+use App\Models\Role;
 use App\Models\User;
 use Cviebrock\EloquentSluggable\Services\SlugService;
+use Illuminate\Support\Facades\Gate;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
 use Livewire\WithFileUploads;
@@ -26,7 +28,7 @@ class CreateEmployees extends Component
     public $password_confirmation;
 
     #[Validate('required')]
-    public $role;
+    public $role_id;
 
     #[Validate('required')]
     public $slug;
@@ -36,6 +38,10 @@ class CreateEmployees extends Component
 
     public function save()
     {
+        if (! Gate::allows('admin')) {
+            abort(403, 'Unauthorized Access');
+        }
+
         if ($this->name) {
             $this->slug = SlugService::createSlug(User::class, 'slug', $this->name);
         }
@@ -61,10 +67,11 @@ class CreateEmployees extends Component
 
     public function render()
     {
-        $role_select = [
-            ['id' => 'staff', 'name' => 'Staff'],
-            ['id' => 'admin', 'name' => 'Admin'],
-        ];
+        if (! Gate::allows('admin')) {
+            abort(403, 'Unauthorized Access');
+        }
+
+        $role_select = Role::all();
 
         return view('livewire.employees.create-employees', [
             'role_select' => $role_select,

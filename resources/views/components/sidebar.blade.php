@@ -43,14 +43,18 @@
         <x-menu-item title="Orders" icon="o-clipboard-document-list" :link="route('orders.index')" />
         <x-menu-sub title="Stock management" icon="o-inbox-stack">
             <x-menu-item title="Stocks" icon="o-square-2-stack" :link="route('stocks.index')" />
-            <x-menu-item title="Stock in" icon="o-arrow-down-on-square-stack" :link="route('stocks.in')" />
-            <x-menu-item title="Stock out" icon="o-arrow-up-on-square-stack" :link="route('stocks.out')" />
+            @can('admin')
+                <x-menu-item title="Stock in" icon="o-arrow-down-on-square-stack" :link="route('stocks.in')" />
+                <x-menu-item title="Stock out" icon="o-arrow-up-on-square-stack" :link="route('stocks.out')" />
+            @endcan
         </x-menu-sub>
         <x-menu-item title="Employees" icon="o-user-group" :link="route('employees.index')" />
         <x-menu-item title="Reports" icon="o-document-chart-bar" :link="route('reports.index')" />
-        {{-- only accesed by admin --}}
-        <x-menu-separator />
-        <x-menu-item title="Categories" icon="o-table-cells" :link="route('categories.index')" />
+        @can('admin')
+            <x-menu-separator />
+            <x-menu-item title="Categories" icon="o-table-cells" :link="route('categories.index')" />
+            <x-menu-item title="Role" icon="o-key" :link="route('roles.index')" />
+        @endcan
 
     </x-menu>
 

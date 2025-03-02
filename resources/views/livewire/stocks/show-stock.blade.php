@@ -43,10 +43,12 @@
                 @endforeach
             </tbody>
         </table>
-        <x-slot:actions>
-            <x-button label="Add stock" icon="o-plus" :link="route('stocks.in')" spinner wire:navigate />
-            <x-button label="Remove stock" icon="o-minus" :link="route('stocks.out')" spinner wire:navigate />
-        </x-slot:actions>
+        @can('admin')
+            <x-slot:actions>
+                <x-button label="Add stock" icon="o-plus" :link="route('stocks.in')" spinner wire:navigate />
+                <x-button label="Remove stock" icon="o-minus" :link="route('stocks.out')" spinner wire:navigate />
+            </x-slot:actions>
+        @endcan
         <div class="my-2">
             {{ $stocks->links() }}
         </div>

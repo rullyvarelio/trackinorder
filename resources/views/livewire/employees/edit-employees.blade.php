@@ -6,7 +6,7 @@
             <x-input label="Email" wire:model="email" />
             <x-password label="Password" wire:model="password" right />
             <x-password label="Confirm password" wire:model="password_confirmation" right />
-            <x-radio label="Role" :options="$role_select" wire:model="role" />
+            <x-radio label="Role" :options="$role_select" wire:model="role_id" />
             <x-file label="image" accept="image/png, image/jpeg, image/jpg" wire:model="image">
                 @if ($image)
                     <img src="{{ $image->temporaryUrl() }}" class="h-40 rounded-lg" />

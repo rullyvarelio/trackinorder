@@ -8,19 +8,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class Category extends Model
+class Role extends Model
 {
+    /** @use HasFactory<\Database\Factories\RoleFactory> */
     use HasFactory, Sluggable;
 
-    protected $fillable = ['name', 'color'];
-
-    /**
-     * Get the products for the category.
-     */
-    public function products(): HasMany
-    {
-        return $this->hasMany(Product::class);
-    }
+    protected $fillable = ['name'];
 
     public function sluggable(): array
     {
@@ -30,6 +23,11 @@ class Category extends Model
                 'onUpdate' => true,
             ],
         ];
+    }
+
+    public function users(): HasMany
+    {
+        return $this->hasMany(User::class);
     }
 
     public function scopeSearch(Builder $query, $searchTerm)

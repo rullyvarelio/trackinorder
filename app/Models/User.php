@@ -7,6 +7,7 @@ namespace App\Models;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -25,7 +26,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'role',
+        'role_id',
         'image',
     ];
 
@@ -42,6 +43,11 @@ class User extends Authenticatable
     public function orders(): HasMany
     {
         return $this->hasMany(Order::class);
+    }
+
+    public function role(): BelongsTo
+    {
+        return $this->belongsTo(Role::class);
     }
 
     /**
@@ -74,7 +80,10 @@ class User extends Authenticatable
         return $query->when($searchTerm !== '', function (Builder $query) use ($searchTerm) {
             $query->where('name', 'like', '%'.$searchTerm.'%')
                 ->orWhere('email', 'like', '%'.$searchTerm.'%')
-                ->orWhere('role', 'like', '%'.$searchTerm.'%');
+                ->orWhereHas('role', function (Builder $roleQuery) use ($searchTerm) {
+                    $roleQuery->where('name', 'like', '%'.$searchTerm.'%')
+                        ->orWhere('slug', 'like', '%'.$searchTerm.'%');
+                });
         });
     }
 }

@@ -11,7 +11,7 @@ class AdminMiddleware
     public function handle(Request $request, Closure $next)
     {
         // Check if user is authenticated and is an admin
-        if (! Auth::check() || Auth::user()->role !== 'admin') {
+        if (! Auth::check() || Auth::user()->role_id !== 1) {
             abort(403, 'Unauthorized action.');
         }
 

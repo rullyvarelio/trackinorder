@@ -2,7 +2,9 @@
 
 namespace App\Livewire\Employees;
 
+use App\Models\Role;
 use App\Models\User;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
 use Livewire\WithFileUploads;
@@ -22,7 +24,7 @@ class EditEmployees extends Component
 
     public $password_confirmation;
 
-    public $role;
+    public $role_id;
 
     public $image;
 
@@ -30,6 +32,10 @@ class EditEmployees extends Component
 
     public function mount($slug)
     {
+        if (! Gate::allows('admin')) {
+            abort(403, 'Unauthorized Access');
+        }
+
         $this->slug = $slug;
 
         $user = User::where('slug', $slug)->first();
@@ -40,17 +46,21 @@ class EditEmployees extends Component
 
         $this->name = $user->name;
         $this->email = $user->email;
-        $this->role = $user->role;
+        $this->role_id = $user->role_id;
         $this->oldImage = $user->image;
     }
 
     public function update()
     {
+        if (! Gate::allows('admin')) {
+            abort(403, 'Unauthorized Access');
+        }
+
         $validated = $this->validate([
             'name' => 'required',
             'email' => 'required|email:dns',
             'password' => 'required|confirmed',
-            'role' => 'required',
+            'role_id' => 'required',
             'image' => 'nullable|image',
         ]);
 
@@ -82,10 +92,11 @@ class EditEmployees extends Component
 
     public function render()
     {
-        $role_select = [
-            ['id' => 'staff', 'name' => 'Staff'],
-            ['id' => 'admin', 'name' => 'Admin'],
-        ];
+        if (! Gate::allows('admin')) {
+            abort(403, 'Unauthorized Access');
+        }
+
+        $role_select = Role::all();
 
         return view('livewire.employees.edit-employees', [
             'role_select' => $role_select,
