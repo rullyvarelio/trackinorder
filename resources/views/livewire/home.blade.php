@@ -74,7 +74,7 @@
 
     <div class="grid gap-7 sm:grid-cols-2 lg:grid-cols-3 mt-10">
         <x-card title="32.4k" subtitle="Orders this year" shadow>
-            <x-chart wire:model="chart1" />
+            <x-chart wire:model="chartPie" />
         </x-card>
         <x-card title="$5,405" subtitle="Revenue this year" shadow class="col-span-2">
             <x-chart wire:model="chart2" />

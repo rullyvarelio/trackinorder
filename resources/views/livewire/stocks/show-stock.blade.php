@@ -1,7 +1,9 @@
 <div>
     <x-header title="Stocks">
         <x-slot:middle class="!justify-end">
-            <x-input icon="o-magnifying-glass" placeholder="Search..." />
+            <form method="GET">
+                <x-input icon="o-magnifying-glass" placeholder="Search..." wire:model.live="searchStocks" />
+            </form>
         </x-slot:middle>
     </x-header>
     <x-card shadow class="overflow-x-auto">
