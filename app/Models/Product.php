@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Product extends Model
 {
@@ -46,14 +47,14 @@ class Product extends Model
         $searchTerm = trim($searchTerm);
 
         return $query->when($searchTerm !== '', function (Builder $query) use ($searchTerm) {
-            $query->where('name', 'like', '%'.$searchTerm.'%')
+            $query->where('name', 'like', '%' . $searchTerm . '%')
                 ->orWhereHas('category', function (Builder $categoryQuery) use ($searchTerm) {
-                    $categoryQuery->where('name', 'like', '%'.$searchTerm.'%');
+                    $categoryQuery->where('name', 'like', '%' . $searchTerm . '%');
                 })
                 ->orWhereHas('category', function (Builder $categoryQuery) use ($searchTerm) {
-                    $categoryQuery->where('slug', 'like', '%'.$searchTerm.'%');
+                    $categoryQuery->where('slug', 'like', '%' . $searchTerm . '%');
                 })
-                ->orWhere('status', 'like', '%'.$searchTerm.'%');
+                ->orWhere('status', 'like', '%' . $searchTerm . '%');
         });
     }
 }

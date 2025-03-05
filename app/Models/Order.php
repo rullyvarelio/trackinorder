@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Order extends Model
 {
@@ -25,11 +26,11 @@ class Order extends Model
         $searchTerm = trim($searchTerm);
 
         return $query->when($searchTerm !== '', function (Builder $query) use ($searchTerm) {
-            $query->where('token_order', 'like', '%'.$searchTerm.'%')
+            $query->where('token_order', 'like', '%' . $searchTerm . '%')
                 ->orWhereHas('user', function (Builder $categoryQuery) use ($searchTerm) {
-                    $categoryQuery->where('name', 'like', '%'.$searchTerm.'%');
+                    $categoryQuery->where('name', 'like', '%' . $searchTerm . '%');
                 })
-                ->orWhere('status', 'like', '%'.$searchTerm.'%');
+                ->orWhere('status', 'like', '%' . $searchTerm . '%');
         });
     }
 
@@ -49,6 +50,15 @@ class Order extends Model
             ->whereBetween('created_at', [
                 now()->startOfMonth(),
                 now()->endOfMonth(),
+            ])
+            ->count();
+    }
+    public static function totalOrdersThisYear()
+    {
+        return self::whereIn('status', ['paid', 'completed'])
+            ->whereBetween('created_at', [
+                now()->startOfYear(),
+                now(),
             ])
             ->count();
     }

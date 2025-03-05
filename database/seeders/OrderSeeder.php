@@ -22,9 +22,16 @@ class OrderSeeder extends Seeder
         $users = User::all();
         $products = Product::where('status', 'available')->where('stock', '>=', 3)->get();
 
-        foreach ($users as $user) {
+        if ($users->isEmpty() || $products->isEmpty()) {
+            $this->command->info('No users or products found. Skipping OrderSeeder.');
+            return;
+        }
+
+        // Generate 100 orders
+        for ($i = 0; $i < 100; $i++) {
+            $user = $users->random();
             $createdAt = Carbon::createFromTimestamp(mt_rand(
-                Carbon::create(2025, 2, 25)->timestamp,
+                Carbon::create(2024, 2, 25)->timestamp,
                 Carbon::now()->timestamp
             ));
 
@@ -32,18 +39,18 @@ class OrderSeeder extends Seeder
                 'user_id' => $user->id,
                 'total_price' => 0,
                 'status' => 'pending',
-                'token_order' => uniqid('ORD'.Str::random(7), false),
+                'token_order' => uniqid('ORD' . Str::random(7), false),
                 'created_at' => $createdAt,
                 'updated_at' => $createdAt,
             ]);
 
             $totalPrice = 0;
+            $selectedProducts = $products->random(rand(1, min(3, $products->count()))); // Ensure we don't exceed available products
 
-            $selectedProducts = $products->random(rand(1, 3));
             foreach ($selectedProducts as $product) {
+                $quantity = rand(1, min(5, $product->stock)); // Ensure we don't order more than stock
 
-                $quantity = rand(1, 5);
-                if ($product->stock < $quantity) {
+                if ($quantity < 1) {
                     continue;
                 }
 
@@ -59,8 +66,6 @@ class OrderSeeder extends Seeder
                     'updated_at' => $createdAt,
                 ]);
 
-                $product->decrement('stock', $quantity);
-
                 StockOut::create([
                     'product_id' => $product->id,
                     'quantity' => $quantity,
@@ -69,24 +74,21 @@ class OrderSeeder extends Seeder
                     'token_order' => $order->token_order,
                     'created_at' => $createdAt,
                     'updated_at' => $createdAt,
-
                 ]);
 
-                $product->stock()->create([
-                    'product_id' => $product->id,
-                    'quantity' => $quantity,
-                    'type' => 'out',
-                    'created_at' => $createdAt,
-                    'updated_at' => $createdAt,
-                ]);
+                // Reduce product stock
+                $product->decrement('stock', $quantity);
 
-                if ($product->stock === 0) {
+                // If stock is zero, update status
+                if ($product->stock <= 0) {
                     $product->update(['status' => 'out of stock']);
                 }
             }
 
+            // Update total price for the order
             $order->update(['total_price' => $totalPrice]);
 
+            // Create a transaction
             Transaction::create([
                 'order_id' => $order->id,
                 'token_order' => $order->token_order,

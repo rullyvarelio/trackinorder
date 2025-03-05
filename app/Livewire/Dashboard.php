@@ -13,12 +13,12 @@ class Dashboard extends Component
 {
     public array $chartPie = [];
 
-    public array $chart2 = [];
+    public array $chartLine = [];
 
     public function mount()
     {
         $this->loadChartDataPie();
-        $this->loadChart2Data();
+        $this->loadChartLineData();
     }
 
     public function loadChartDataPie()
@@ -29,6 +29,10 @@ class Dashboard extends Component
             ->join('order_product', 'products.id', '=', 'order_product.product_id')
             ->join('orders', 'order_product.order_id', '=', 'orders.id')
             ->whereIn('orders.status', ['paid', 'completed'])
+            ->whereBetween('orders.created_at', [
+                Carbon::now()->startOfYear(),
+                Carbon::now()->now(),
+            ])
             ->selectRaw('categories.name as category, SUM(order_product.quantity) as total_orders')
             ->groupBy('categories.name')
             ->orderByDesc('total_orders')
@@ -47,9 +51,16 @@ class Dashboard extends Component
                 'labels' => $labels,
                 'datasets' => [
                     [
-                        'label' => 'Total Orders',
+                        'label' => 'Total Ordered Product',
                         'data' => $values,
                         'backgroundColor' => $backgroundColors,
+                    ],
+                ],
+            ],
+            'options' => [
+                'plugins' => [
+                    'legend' => [
+                        'display' => false, // Ensure legend is shown
                     ],
                 ],
             ],
@@ -57,39 +68,40 @@ class Dashboard extends Component
     }
 
 
-    public function loadChart2Data()
+    public function loadChartLineData()
     {
-        $data = Transaction::selectRaw('
-        strftime("%m", created_at) as month, 
-        SUM(total_price) as total_revenue
-    ')
+
+        $monthlyRevenue = DB::table('transactions')
+            ->selectRaw("CAST(strftime('%m', created_at) AS INTEGER) as month, SUM(total_price) as revenue")
             ->whereYear('created_at', Carbon::now()->year)
             ->groupBy('month')
             ->orderBy('month')
             ->get();
 
-        // Mapping bulan dari angka ke nama bulan
         $monthsMap = [
-            '01' => 'January',
-            '02' => 'February',
-            '03' => 'March',
-            '04' => 'April',
-            '05' => 'May',
-            '06' => 'June',
-            '07' => 'July',
-            '08' => 'August',
-            '09' => 'September',
-            '10' => 'October',
-            '11' => 'November',
-            '12' => 'December'
+            1 => 'January',
+            2 => 'February',
+            3 => 'March',
+            4 => 'April',
+            5 => 'May',
+            6 => 'June',
+            7 => 'July',
+            8 => 'August',
+            9 => 'September',
+            10 => 'October',
+            11 => 'November',
+            12 => 'December',
         ];
 
-        // Konversi bulan ke nama bulan dan ambil nilai revenue
-        $labels = $data->pluck('month')->map(fn($m) => $monthsMap[$m] ?? $m);
-        $values = $data->pluck('total_revenue');
+        $labels = array_values($monthsMap);
 
-        // Simpan data ke array chart
-        $this->chart2 = [
+        $values = array_fill(1, 12, 0); // Initialize all months with 0 revenue
+        foreach ($monthlyRevenue as $data) {
+            $values[$data->month] = $data->revenue;
+        }
+        $values = array_values($values); // Convert to simple indexed array
+
+        $this->chartLine = [
             'type' => 'line',
             'data' => [
                 'labels' => $labels,
@@ -97,16 +109,26 @@ class Dashboard extends Component
                     [
                         'data' => $values,
                         'label' => 'Revenue',
-                        'borderColor' => '#1A56DB',
-                        'backgroundColor' => 'rgba(26, 86, 219, 0.2)',
+                        'borderColor' => '#28a745', // Green line color
+                        'backgroundColor' => 'rgba(40, 167, 69, 0.2)', // Light green fill
                         'fill' => true,
                     ],
                 ],
             ],
             'options' => [
+                'plugins' => [
+                    'legend' => [
+                        'display' => false, // Ensure legend is shown
+                    ],
+                ],
                 'title' => [
                     'display' => true,
-                    'text' => 'Revenue per Month (in USD)',
+                    'text' => 'Monthly Revenue ($)',
+                ],
+                'elements' => [
+                    'line' => [
+                        'tension' => 0.4, // Global setting for smooth lines
+                    ],
                 ],
             ],
         ];
@@ -124,16 +146,20 @@ class Dashboard extends Component
                 ->leftJoin('orders', 'order_product.order_id', '=', 'orders.id')
                 ->whereIn('orders.status', ['paid', 'completed'])
                 ->whereBetween('orders.created_at', [
-                    Carbon::now()->startOfMonth(),
-                    Carbon::now()->endOfMonth(),
+                    Carbon::now()->startOfYear(),
+                    Carbon::now()->now(),
                 ])
                 ->select(
                     'products.*',
                     DB::raw('COALESCE(SUM(order_product.quantity), 0) as total_sales'),
-                    DB::raw('COALESCE(SUM(order_product.subtotal), 0) as monthly_revenue')
+                    DB::raw('COALESCE(SUM(order_product.subtotal), 0) as monthly_revenue'),
+                    DB::raw('MAX(orders.created_at) as latest_order_date') // Get the most recent order date
                 )
                 ->groupBy('products.id')
+                ->orderByDesc('latest_order_date')
                 ->paginate(10),
+            'orderThisYear' => Order::totalOrdersThisYear(),
+
         ]);
     }
 }

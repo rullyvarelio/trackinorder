@@ -12,7 +12,11 @@
 <body class="min-h-screen font-sans antialiased bg-base-200/50 dark:bg-base-200">
     <x-nav sticky class="lg:hidden">
         <x-slot:brand>
-            <div class="ml-5 font-bold">Trackin Order</div>
+            <div class="w-9 h-9 text-primary text-2xl ml-5 font-bold flex">
+                <img src="{{ asset('logo-light.svg') }}" alt="Logo" class="block dark:hidden" />
+                <img src="{{ asset('logo-dark.svg') }}" alt="Logo" class="hidden dark:block" />
+                TrackinOrder
+            </div>
         </x-slot:brand>
         <x-slot:actions>
             <label for="main-drawer" class="lg:hidden mr-3">
